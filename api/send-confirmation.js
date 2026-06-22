@@ -19,7 +19,7 @@ module.exports = async (req, res) => {
   try {
     // Email to student
     await resend.emails.send({
-      from: "DinkWithEQ <onboarding@resend.dev>",
+      from: "Coach EQ <bookings@dinkwitheq.com>",
       to: email,
       subject: `✅ Booking Confirmed – ${lessonType} on ${date}`,
       html: `
@@ -61,7 +61,7 @@ module.exports = async (req, res) => {
 
     // Notification email to Coach EQ
     await resend.emails.send({
-      from: "DinkWithEQ Bookings <onboarding@resend.dev>",
+      from: "DinkWithEQ Bookings <bookings@dinkwitheq.com>",
       to: "dinkwitheq@gmail.com",
       subject: `🏓 New Booking: ${name} – ${date} at ${time}`,
       html: `
