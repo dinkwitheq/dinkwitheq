@@ -1,10 +1,25 @@
 const { Resend } = require("resend");
 const { google } = require("googleapis");
 
-// Parse a booking date/time string into a JS Date
+// Parse a booking date/time string into an ISO string in Pacific time
 // date: "June 22, 2026"  time: "10:00 AM"
 function parseBookingDateTime(date, time) {
-  return new Date(`${date} ${time}`);
+  // Parse hours and minutes from "8:30 AM" / "10:00 AM"
+  const [rawTime, meridiem] = time.split(" ");
+  let [hours, minutes] = rawTime.split(":").map(Number);
+  if (meridiem === "PM" && hours !== 12) hours += 12;
+  if (meridiem === "AM" && hours === 12) hours = 0;
+
+  // Parse date parts from "June 22, 2026"
+  const d = new Date(`${date}`);
+  const year = d.getFullYear();
+  const month = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  const hh = String(hours).padStart(2, "0");
+  const mm = String(minutes).padStart(2, "0");
+
+  // Return as a local Pacific time string — Google Calendar timeZone field handles the rest
+  return `${year}-${month}-${day}T${hh}:${mm}:00`;
 }
 
 async function addToGoogleCalendar({ name, email, date, time, lessonType, notes, paymentMethod }) {
@@ -16,8 +31,12 @@ async function addToGoogleCalendar({ name, email, date, time, lessonType, notes,
 
   const calendar = google.calendar({ version: "v3", auth });
   const isCash = paymentMethod === "cash";
-  const start = parseBookingDateTime(date, time);
-  const end = new Date(start.getTime() + 60 * 60 * 1000); // 1 hour
+  const startLocal = parseBookingDateTime(date, time);
+  // Build end time by incrementing the hour in the local string
+  const endLocal = parseBookingDateTime(date, time).replace(
+    /T(\d{2})/,
+    (_, h) => `T${String(Number(h) + 1).padStart(2, "0")}`
+  );
 
   const event = {
     summary: `${name} — ${lessonType} (${isCash ? "Cash" : "Paid"})`,
@@ -28,8 +47,8 @@ async function addToGoogleCalendar({ name, email, date, time, lessonType, notes,
       `Payment: ${isCash ? "💵 Cash at lesson" : "💳 Paid online ($50)"}`,
       notes ? `Notes: ${notes}` : null,
     ].filter(Boolean).join("\n"),
-    start: { dateTime: start.toISOString(), timeZone: "America/Los_Angeles" },
-    end: { dateTime: end.toISOString(), timeZone: "America/Los_Angeles" },
+    start: { dateTime: startLocal, timeZone: "America/Los_Angeles" },
+    end: { dateTime: endLocal, timeZone: "America/Los_Angeles" },
     colorId: isCash ? "5" : "2", // 5 = yellow (cash), 2 = green (paid)
   };
 
