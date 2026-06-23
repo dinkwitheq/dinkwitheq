@@ -17,6 +17,15 @@ input, select, textarea, button {
   max-width: 100%;
 }
 
+/* Nav: show desktop links on wide screens, hamburger on mobile */
+.nav-desktop { display: flex !important; }
+.nav-mobile  { display: none !important; }
+
+@media (max-width: 640px) {
+  .nav-desktop { display: none !important; }
+  .nav-mobile  { display: flex !important; }
+}
+
 @media (max-width: 600px) {
   /* Prevent horizontal overflow */
   #root {
