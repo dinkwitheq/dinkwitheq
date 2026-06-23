@@ -34,7 +34,7 @@ async function addToGoogleCalendar({ name, email, date, time, lessonType, notes,
   };
 
   await calendar.events.insert({
-    calendarId: "dinkwitheq@gmail.com",
+    calendarId: "eddiequan2@gmail.com",
     resource: event,
   });
 }
