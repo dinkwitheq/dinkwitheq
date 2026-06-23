@@ -22,7 +22,7 @@ function parseBookingDateTime(date, time) {
   return `${year}-${month}-${day}T${hh}:${mm}:00`;
 }
 
-async function addToGoogleCalendar({ name, email, date, time, lessonType, notes, paymentMethod }) {
+async function addToGoogleCalendar({ name, email, date, time, lessonType, notes, paymentMethod, participants }) {
   const credentials = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT);
   const auth = new google.auth.GoogleAuth({
     credentials,
@@ -38,12 +38,15 @@ async function addToGoogleCalendar({ name, email, date, time, lessonType, notes,
     (_, h) => `T${String(Number(h) + 1).padStart(2, "0")}`
   );
 
+  const groupSize = participants && participants.length > 0 ? participants.length : null;
   const event = {
-    summary: `${name} — ${lessonType} (${isCash ? "Cash" : "Paid"})`,
+    summary: `${name} — ${lessonType}${groupSize ? ` (${groupSize + 1} players)` : ""} (${isCash ? "Cash" : "Paid"})`,
     description: [
-      `Student: ${name}`,
+      `Booked by: ${name}`,
       `Email: ${email}`,
       `Lesson: ${lessonType}`,
+      groupSize ? `Group size: ${groupSize + 1} players (booker + ${groupSize} others)` : null,
+      groupSize ? `Participants:\n  • ${name} (booker)\n  ${participants.map(p => `• ${p}`).join("\n  ")}` : null,
       `Payment: ${isCash ? "💵 Cash at lesson" : "💳 Paid online ($50)"}`,
       notes ? `Notes: ${notes}` : null,
     ].filter(Boolean).join("\n"),
@@ -70,8 +73,11 @@ module.exports = async (req, res) => {
     return res.status(405).json({ error: "Method not allowed" });
 
   const resend = new Resend(process.env.RESEND_API_KEY);
-  const { name, email, date, time, lessonType, notes, paymentMethod } = req.body;
+  const { name, email, date, time, lessonType, notes, paymentMethod, participants } = req.body;
   const isCash = paymentMethod === "cash";
+  const groupParticipants = Array.isArray(participants) ? participants.filter(p => p && p.trim()) : [];
+  const isGroup = groupParticipants.length > 0;
+  const totalPlayers = isGroup ? groupParticipants.length + 1 : null;
 
   try {
     // Email to student
@@ -113,26 +119,51 @@ module.exports = async (req, res) => {
     await resend.emails.send({
       from: "DinkWithEQ Bookings <bookings@dinkwitheq.com>",
       to: "dinkwitheq@gmail.com",
-      subject: `🏓 New Booking: ${name} – ${date} at ${time}`,
+      subject: `🏓 New Booking: ${name} – ${lessonType} on ${date} at ${time}`,
       html: `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 32px;">
           <h2>New Booking Alert 🏓</h2>
           <table style="width: 100%; border-collapse: collapse;">
-            <tr><td style="color: #6b7280; padding: 8px 0; border-bottom: 1px solid #eee;">Student</td><td style="font-weight: bold;">${name}</td></tr>
+            <tr><td style="color: #6b7280; padding: 8px 0; border-bottom: 1px solid #eee; width: 140px;">Booked by</td><td style="font-weight: bold;">${name}</td></tr>
             <tr><td style="color: #6b7280; padding: 8px 0; border-bottom: 1px solid #eee;">Email</td><td><a href="mailto:${email}">${email}</a></td></tr>
-            <tr><td style="color: #6b7280; padding: 8px 0; border-bottom: 1px solid #eee;">Lesson Type</td><td>${lessonType}</td></tr>
+            <tr><td style="color: #6b7280; padding: 8px 0; border-bottom: 1px solid #eee;">Lesson Type</td><td style="font-weight: bold;">${lessonType}</td></tr>
             <tr><td style="color: #6b7280; padding: 8px 0; border-bottom: 1px solid #eee;">Date</td><td>${date}</td></tr>
             <tr><td style="color: #6b7280; padding: 8px 0; border-bottom: 1px solid #eee;">Time</td><td>${time}</td></tr>
             <tr><td style="color: #6b7280; padding: 8px 0; border-bottom: 1px solid #eee;">Payment</td><td>${isCash ? "💵 Cash at lesson" : "💳 Paid online"}</td></tr>
-            ${notes ? `<tr><td style="color: #6b7280; padding: 8px 0;">Notes</td><td>${notes}</td></tr>` : ""}
+            ${notes ? `<tr><td style="color: #6b7280; padding: 8px 0; border-bottom: 1px solid #eee;">Notes</td><td>${notes}</td></tr>` : ""}
           </table>
+
+          ${isGroup ? `
+          <div style="margin-top: 24px; background: #f0fdf4; border-left: 4px solid #16a34a; padding: 16px; border-radius: 4px;">
+            <h3 style="margin: 0 0 12px 0; color: #15803d;">👥 Group Clinic — ${totalPlayers} Players</h3>
+            <table style="width: 100%; border-collapse: collapse;">
+              <tr style="background: #dcfce7;">
+                <td style="padding: 6px 10px; font-weight: bold; color: #166534;">#</td>
+                <td style="padding: 6px 10px; font-weight: bold; color: #166534;">Name</td>
+                <td style="padding: 6px 10px; font-weight: bold; color: #166534;">Role</td>
+              </tr>
+              <tr>
+                <td style="padding: 6px 10px; border-bottom: 1px solid #bbf7d0;">1</td>
+                <td style="padding: 6px 10px; border-bottom: 1px solid #bbf7d0; font-weight: bold;">${name}</td>
+                <td style="padding: 6px 10px; border-bottom: 1px solid #bbf7d0; color: #6b7280;">Booker</td>
+              </tr>
+              ${groupParticipants.map((p, i) => `
+              <tr>
+                <td style="padding: 6px 10px; border-bottom: 1px solid #bbf7d0;">${i + 2}</td>
+                <td style="padding: 6px 10px; border-bottom: 1px solid #bbf7d0; font-weight: bold;">${p}</td>
+                <td style="padding: 6px 10px; border-bottom: 1px solid #bbf7d0; color: #6b7280;">Participant</td>
+              </tr>`).join("")}
+            </table>
+            <p style="margin: 10px 0 0 0; font-size: 13px; color: #15803d;">✅ Booker confirmed authority to sign waiver on behalf of all participants.</p>
+          </div>
+          ` : ""}
         </div>
       `,
     });
 
     // Add to Google Calendar
     try {
-      await addToGoogleCalendar({ name, email, date, time, lessonType, notes, paymentMethod });
+      await addToGoogleCalendar({ name, email, date, time, lessonType, notes, paymentMethod, participants: groupParticipants });
     } catch (calErr) {
       console.error("Google Calendar error:", calErr);
       // Don't fail the whole request if calendar fails
