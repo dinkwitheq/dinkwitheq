@@ -1,4 +1,45 @@
-.App {
-  font-family: sans-serif;
-  text-align: center;
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  -webkit-text-size-adjust: 100%;
+}
+
+img {
+  max-width: 100%;
+}
+
+input, select, textarea, button {
+  max-width: 100%;
+}
+
+@media (max-width: 600px) {
+  /* Prevent horizontal overflow */
+  #root {
+    overflow-x: hidden;
+    width: 100%;
+  }
+
+  /* Stack grids on mobile */
+  div[style*="grid-template-columns: 1fr 1fr"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Reduce padding on mobile */
+  div[style*="padding: 2.5rem"] {
+    padding: 1.2rem !important;
+  }
+
+  /* Ensure full width inputs */
+  input[type="text"],
+  input[type="email"],
+  select,
+  textarea {
+    width: 100% !important;
+    font-size: 16px !important; /* prevents iOS zoom on focus */
+  }
 }
