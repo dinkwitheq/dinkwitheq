@@ -17,6 +17,10 @@ input, select, textarea, button {
   max-width: 100%;
 }
 
+@media (max-width: 640px) {
+  .service-side-panel { display: none !important; }
+}
+
 @media (max-width: 600px) {
   /* Prevent horizontal overflow */
   #root {
