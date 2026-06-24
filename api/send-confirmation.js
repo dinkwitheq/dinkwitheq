@@ -73,7 +73,7 @@ module.exports = async (req, res) => {
     return res.status(405).json({ error: "Method not allowed" });
 
   const resend = new Resend(process.env.RESEND_API_KEY);
-  const { name, email, date, time, lessonType, notes, paymentMethod, participants } = req.body;
+  const { name, email, date, time, lessonType, notes, paymentMethod, participants, contactMethod, contactValue } = req.body;
   const isCash = paymentMethod === "cash";
   const groupParticipants = Array.isArray(participants) ? participants.filter(p => p && p.trim()) : [];
   const isGroup = groupParticipants.length > 0;
@@ -130,6 +130,7 @@ module.exports = async (req, res) => {
             <tr><td style="color: #6b7280; padding: 8px 0; border-bottom: 1px solid #eee;">Date</td><td>${date}</td></tr>
             <tr><td style="color: #6b7280; padding: 8px 0; border-bottom: 1px solid #eee;">Time</td><td>${time}</td></tr>
             <tr><td style="color: #6b7280; padding: 8px 0; border-bottom: 1px solid #eee;">Payment</td><td>${isCash ? "💵 Cash at lesson" : "💳 Paid online"}</td></tr>
+            ${contactMethod ? `<tr><td style="color: #6b7280; padding: 8px 0; border-bottom: 1px solid #eee;">${contactMethod === "phone" ? "📱 Phone" : "📧 Alt Email"}</td><td style="font-weight:bold;color:#15803d;">${contactValue}</td></tr>` : ""}
             ${notes ? `<tr><td style="color: #6b7280; padding: 8px 0; border-bottom: 1px solid #eee;">Notes</td><td>${notes}</td></tr>` : ""}
           </table>
 
