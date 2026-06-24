@@ -32,11 +32,12 @@ async function addToGoogleCalendar({ name, email, date, time, lessonType, notes,
   const calendar = google.calendar({ version: "v3", auth });
   const isCash = paymentMethod === "cash";
   const startLocal = parseBookingDateTime(date, time);
-  // Build end time by incrementing the hour in the local string
-  const endLocal = parseBookingDateTime(date, time).replace(
-    /T(\d{2})/,
-    (_, h) => `T${String(Number(h) + 1).padStart(2, "0")}`
-  );
+  // Build end time: start + 90 minutes
+  const startDate = new Date(startLocal);
+  startDate.setMinutes(startDate.getMinutes() + 90);
+  const endHH = String(startDate.getHours()).padStart(2, "0");
+  const endMM = String(startDate.getMinutes()).padStart(2, "0");
+  const endLocal = startLocal.replace(/T\d{2}:\d{2}/, `T${endHH}:${endMM}`);
 
   const groupSize = participants && participants.length > 0 ? participants.length : null;
   const event = {
