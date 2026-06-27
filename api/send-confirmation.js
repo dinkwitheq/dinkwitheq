@@ -1,5 +1,10 @@
 const { Resend } = require("resend");
 const { google } = require("googleapis");
+const { createClient } = require("@supabase/supabase-js");
+
+function getSupabase() {
+  return createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
+}
 
 function parseBookingDateTime(date, time) {
   const [rawTime, meridiem] = time.split(" ");
@@ -161,6 +166,28 @@ module.exports = async (req, res) => {
         </div>
       `,
     });
+
+    // Save booking to Supabase
+    try {
+      const supabase = getSupabase();
+      const bookingRows = (Array.isArray(slots) ? slots : [{ date: firstSlot.date, time: firstSlot.time }]).map(s => ({
+        name,
+        email,
+        lesson_type: lessonType,
+        lesson_date: s.date,
+        lesson_time: s.time,
+        payment_method: paymentMethod,
+        amount: lessonCount * 50,
+        notes: notes || null,
+        participants: isGroup ? groupParticipants : null,
+        contact_method: contactMethod || null,
+        contact_value: contactValue || null,
+      }));
+      const { error: dbError } = await supabase.from("bookings").insert(bookingRows);
+      if (dbError) console.error("Supabase insert error:", dbError);
+    } catch (dbErr) {
+      console.error("Supabase error:", dbErr);
+    }
 
     // Add a Google Calendar event for each slot
     try {
