@@ -170,7 +170,6 @@ module.exports = async (req, res) => {
     // Save booking to Supabase
     try {
       const supabase = getSupabase();
-      console.log("Supabase URL:", process.env.SUPABASE_URL);
       const bookingRows = (Array.isArray(slots) ? slots : [{ date: firstSlot.date, time: firstSlot.time }]).map(s => ({
         name,
         email,
@@ -183,10 +182,8 @@ module.exports = async (req, res) => {
         contact_method: contactMethod || null,
         contact_value: contactValue || null,
       }));
-      console.log("Inserting rows:", JSON.stringify(bookingRows));
-      const { data, error: dbError } = await supabase.from("bookings").insert(bookingRows).select();
+      const { error: dbError } = await supabase.from("bookings").insert(bookingRows);
       if (dbError) console.error("Supabase insert error:", JSON.stringify(dbError));
-      else console.log("Supabase insert success:", JSON.stringify(data));
     } catch (dbErr) {
       console.error("Supabase error:", dbErr.message);
     }
