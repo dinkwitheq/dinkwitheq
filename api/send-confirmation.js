@@ -6,6 +6,22 @@ function getSupabase() {
   return createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
 }
 
+async function deductGiftCardLessons(supabase, code, lessonsUsed) {
+  const { data, error } = await supabase
+    .from("gift_cards")
+    .select("lessons_remaining")
+    .eq("code", code.trim().toUpperCase())
+    .single();
+  if (error || !data) throw new Error("Gift card not found");
+  if (data.lessons_remaining < lessonsUsed) throw new Error("Not enough lessons remaining on gift card");
+  const newRemaining = data.lessons_remaining - lessonsUsed;
+  await supabase
+    .from("gift_cards")
+    .update({ lessons_remaining: newRemaining })
+    .eq("code", code.trim().toUpperCase());
+  return newRemaining;
+}
+
 function parseBookingDateTime(date, time) {
   const [rawTime, meridiem] = time.split(" ");
   let [hours, minutes] = rawTime.split(":").map(Number);
@@ -67,8 +83,9 @@ module.exports = async (req, res) => {
   if (req.method !== "POST") return res.status(405).json({ error: "Method not allowed" });
 
   const resend = new Resend(process.env.RESEND_API_KEY);
-  const { name, email, slots, lessonType, notes, paymentMethod, participants, contactMethod, contactValue } = req.body;
+  const { name, email, slots, lessonType, notes, paymentMethod, participants, contactMethod, contactValue, giftCardCode } = req.body;
   const isCash = paymentMethod === "cash";
+  const isGiftCard = paymentMethod === "gift_card";
   const groupParticipants = Array.isArray(participants) ? participants.filter(p => p && p.trim()) : [];
   const isGroup = groupParticipants.length > 0;
   const totalPlayers = isGroup ? groupParticipants.length + 1 : null;
@@ -87,6 +104,17 @@ module.exports = async (req, res) => {
     ? (slots.length === 1 ? `${slots[0].date}` : `${slots.length} Lessons`)
     : "Lesson";
 
+  // Deduct gift card lessons upfront so we know the remaining count for emails
+  let giftCardLessonsLeft = null;
+  if (isGiftCard && giftCardCode) {
+    try {
+      const supabase = getSupabase();
+      giftCardLessonsLeft = await deductGiftCardLessons(supabase, giftCardCode, lessonCount);
+    } catch (gcErr) {
+      return res.status(400).json({ error: gcErr.message });
+    }
+  }
+
   try {
     await resend.emails.send({
       from: "Coach EQ <bookings@dinkwitheq.com>",
@@ -104,11 +132,14 @@ module.exports = async (req, res) => {
             <table style="width: 100%; border-collapse: collapse;">
               <tr><td style="color: #9ca3af; padding: 6px 0;">Lesson Type</td><td style="color: #ffffff; font-weight: bold;">${lessonType}</td></tr>
               ${slotRowsHTML}
-              <tr><td style="color: #9ca3af; padding: 6px 0;">Amount</td><td style="color: #C8F542; font-weight: bold;">$${totalAmount}.00 ${isCash ? "(due at lesson)" : "(paid)"}</td></tr>
+              <tr><td style="color: #9ca3af; padding: 6px 0;">Amount</td><td style="color: #C8F542; font-weight: bold;">${isGiftCard ? `Gift Card (${giftCardCode})` : `$${totalAmount}.00 ${isCash ? "(due at lesson)" : "(paid)"}`}</td></tr>
+              ${isGiftCard && giftCardLessonsLeft !== null ? `<tr><td style="color: #9ca3af; padding: 6px 0;">Card Balance</td><td style="color: #C8F542; font-weight: bold;">${giftCardLessonsLeft} lesson${giftCardLessonsLeft !== 1 ? "s" : ""} remaining</td></tr>` : ""}
               ${notes ? `<tr><td style="color: #9ca3af; padding: 6px 0;">Notes</td><td style="color: #ffffff;">${notes}</td></tr>` : ""}
             </table>
           </div>
-          ${isCash
+          ${isGiftCard
+            ? `<p style="color: #C8F542;">🎁 Gift card redeemed. ${giftCardLessonsLeft !== null ? `You have <strong>${giftCardLessonsLeft} lesson${giftCardLessonsLeft !== 1 ? "s" : ""} remaining</strong> on your card.` : ""}</p>`
+            : isCash
             ? `<p style="color: #C8F542;">💵 Please bring $${totalAmount} cash to your lesson${lessonCount > 1 ? "s" : ""}.</p>`
             : '<p style="color: #C8F542;">✅ Payment received. You\'re all set!</p>'
           }
@@ -134,8 +165,9 @@ module.exports = async (req, res) => {
             <tr><td style="color: #6b7280; padding: 8px 0; border-bottom: 1px solid #eee;">Email</td><td><a href="mailto:${email}">${email}</a></td></tr>
             <tr><td style="color: #6b7280; padding: 8px 0; border-bottom: 1px solid #eee;">Lesson Type</td><td style="font-weight: bold;">${lessonType}</td></tr>
             ${slotRowsCoachHTML}
-            <tr><td style="color: #6b7280; padding: 8px 0; border-bottom: 1px solid #eee;">Total</td><td style="font-weight: bold; color: #15803d;">$${totalAmount}.00</td></tr>
-            <tr><td style="color: #6b7280; padding: 8px 0; border-bottom: 1px solid #eee;">Payment</td><td>${isCash ? "💵 Cash at lesson" : "💳 Paid online"}</td></tr>
+            <tr><td style="color: #6b7280; padding: 8px 0; border-bottom: 1px solid #eee;">Total</td><td style="font-weight: bold; color: #15803d;">${isGiftCard ? "🎁 Gift Card" : `$${totalAmount}.00`}</td></tr>
+            <tr><td style="color: #6b7280; padding: 8px 0; border-bottom: 1px solid #eee;">Payment</td><td>${isGiftCard ? `🎁 Gift Card <strong>${giftCardCode}</strong>` : isCash ? "💵 Cash at lesson" : "💳 Paid online"}</td></tr>
+            ${isGiftCard && giftCardLessonsLeft !== null ? `<tr><td style="color: #6b7280; padding: 8px 0; border-bottom: 1px solid #eee; color: #b45309; font-weight: bold;">Card Balance Left</td><td style="font-weight: bold; color: #b45309;">${giftCardLessonsLeft} lesson${giftCardLessonsLeft !== 1 ? "s" : ""} remaining on ${giftCardCode}</td></tr>` : ""}
             ${contactMethod ? `<tr><td style="color: #6b7280; padding: 8px 0; border-bottom: 1px solid #eee;">${contactMethod === "phone" ? "📱 Phone" : "📧 Alt Email"}</td><td style="font-weight:bold;color:#15803d;">${contactValue}</td></tr>` : ""}
             ${notes ? `<tr><td style="color: #6b7280; padding: 8px 0; border-bottom: 1px solid #eee;">Notes</td><td>${notes}</td></tr>` : ""}
           </table>
