@@ -1046,24 +1046,25 @@ function BookPage({ defaultLessonType = "Private Lesson" }) {
       loadStripe().then((stripe: any) => {
         stripeInstanceRef.current = stripe;
         const elements = stripe.elements();
-        const card = elements.create("card", {
-          hidePostalCode: true,
-          style: {
-            base: {
-              color: "#ffffff",
-              fontFamily: "'DM Sans', sans-serif",
-              fontSize: "18px",
-              backgroundColor: "transparent",
-              "::placeholder": { color: "#6b7280" },
-              iconColor: "#C8F542",
-            },
-            invalid: { color: "#ef4444", iconColor: "#ef4444" },
+        const elStyle = {
+          base: {
+            color: "#ffffff",
+            fontFamily: "'DM Sans', sans-serif",
+            fontSize: "16px",
+            backgroundColor: "transparent",
+            "::placeholder": { color: "#6b7280" },
+            iconColor: "#C8F542",
           },
-        });
-        const el = document.getElementById("stripe-card-element");
-        if (el) {
-          card.mount("#stripe-card-element");
-          cardElementRef.current = card;
+          invalid: { color: "#ef4444", iconColor: "#ef4444" },
+        };
+        const cardNumber = elements.create("cardNumber", { showIcon: true, style: elStyle });
+        const cardExpiry = elements.create("cardExpiry", { style: elStyle });
+        const cardCvc = elements.create("cardCvc", { style: elStyle });
+        if (document.getElementById("stripe-card-number")) {
+          cardNumber.mount("#stripe-card-number");
+          cardExpiry.mount("#stripe-card-expiry");
+          cardCvc.mount("#stripe-card-cvc");
+          cardElementRef.current = cardNumber;
         }
       });
     }
@@ -1497,11 +1498,21 @@ function BookPage({ defaultLessonType = "Private Lesson" }) {
                     </div>
                   </div>
 
-                  {/* Stripe input */}
+                  {/* Stripe inputs: number, then expiry + CVC */}
                   <div
-                    id="stripe-card-element"
-                    style={{ background: "#080f07", border: `1.5px solid rgba(200,245,66,0.28)`, borderRadius: 10, padding: "1rem 1rem 1.1rem", marginBottom: 14, boxShadow: "inset 0 2px 10px rgba(0,0,0,0.4), 0 0 0 3px rgba(200,245,66,0.04)" }}
+                    id="stripe-card-number"
+                    style={{ background: "#080f07", border: `1.5px solid rgba(200,245,66,0.28)`, borderRadius: 10, padding: "1rem", marginBottom: 10, boxShadow: "inset 0 2px 10px rgba(0,0,0,0.4), 0 0 0 3px rgba(200,245,66,0.04)" }}
                   />
+                  <div style={{ display: "flex", gap: 10, marginBottom: 14 }}>
+                    <div
+                      id="stripe-card-expiry"
+                      style={{ flex: 1, background: "#080f07", border: `1.5px solid rgba(200,245,66,0.28)`, borderRadius: 10, padding: "1rem", boxShadow: "inset 0 2px 10px rgba(0,0,0,0.4)" }}
+                    />
+                    <div
+                      id="stripe-card-cvc"
+                      style={{ flex: 1, background: "#080f07", border: `1.5px solid rgba(200,245,66,0.28)`, borderRadius: 10, padding: "1rem", boxShadow: "inset 0 2px 10px rgba(0,0,0,0.4)" }}
+                    />
+                  </div>
 
                   {/* Stripe badge + encryption */}
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
@@ -3528,16 +3539,21 @@ function GiftCardModal({ option, onClose, onSuccess }) {
       loadStripe().then((stripe: any) => {
         stripeRef.current = stripe;
         const elements = stripe.elements();
-        const card = elements.create("card", {
-          hidePostalCode: true,
-          style: {
-            base: { color: "#ffffff", fontFamily: "'DM Sans', sans-serif", fontSize: "18px", backgroundColor: "transparent", "::placeholder": { color: "#6b7280" }, iconColor: "#C8F542" },
-            invalid: { color: "#ef4444", iconColor: "#ef4444" },
-          },
-        });
+        const elStyle = {
+          base: { color: "#ffffff", fontFamily: "'DM Sans', sans-serif", fontSize: "16px", backgroundColor: "transparent", "::placeholder": { color: "#6b7280" }, iconColor: "#C8F542" },
+          invalid: { color: "#ef4444", iconColor: "#ef4444" },
+        };
+        const cardNumber = elements.create("cardNumber", { showIcon: true, style: elStyle });
+        const cardExpiry = elements.create("cardExpiry", { style: elStyle });
+        const cardCvc = elements.create("cardCvc", { style: elStyle });
         setTimeout(() => {
-          const el = document.getElementById("gc-stripe-element");
-          if (el && el.childElementCount === 0) { card.mount("#gc-stripe-element"); cardRef.current = card; }
+          const el = document.getElementById("gc-stripe-number");
+          if (el && el.childElementCount === 0) {
+            cardNumber.mount("#gc-stripe-number");
+            cardExpiry.mount("#gc-stripe-expiry");
+            cardCvc.mount("#gc-stripe-cvc");
+            cardRef.current = cardNumber;
+          }
         }, 100);
       });
     }
@@ -3651,7 +3667,11 @@ function GiftCardModal({ option, onClose, onSuccess }) {
                 <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 9, color: "#a29dff", fontWeight: 700 }}>Stripe</span>
               </div>
             </div>
-            <div id="gc-stripe-element" style={{ background: "#080f07", border: "1.5px solid rgba(200,245,66,0.28)", borderRadius: 10, padding: "1rem", marginBottom: 14, boxShadow: "inset 0 2px 10px rgba(0,0,0,0.4)" }} />
+            <div id="gc-stripe-number" style={{ background: "#080f07", border: "1.5px solid rgba(200,245,66,0.28)", borderRadius: 10, padding: "1rem", marginBottom: 10, boxShadow: "inset 0 2px 10px rgba(0,0,0,0.4)" }} />
+            <div style={{ display: "flex", gap: 10, marginBottom: 14 }}>
+              <div id="gc-stripe-expiry" style={{ flex: 1, background: "#080f07", border: "1.5px solid rgba(200,245,66,0.28)", borderRadius: 10, padding: "1rem", boxShadow: "inset 0 2px 10px rgba(0,0,0,0.4)" }} />
+              <div id="gc-stripe-cvc" style={{ flex: 1, background: "#080f07", border: "1.5px solid rgba(200,245,66,0.28)", borderRadius: 10, padding: "1rem", boxShadow: "inset 0 2px 10px rgba(0,0,0,0.4)" }} />
+            </div>
             {error && <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: "#ef4444", margin: "0 0 12px" }}>{error}</p>}
             <button onClick={handlePurchase} disabled={processing} style={{ width: "100%", background: processing ? COLORS.mid : COLORS.lime, color: COLORS.dark, border: "none", borderRadius: 10, padding: "0.9rem", fontFamily: "'Bebas Neue', sans-serif", fontSize: 20, letterSpacing: 2, cursor: processing ? "not-allowed" : "pointer", boxShadow: processing ? "none" : "0 4px 16px rgba(200,245,66,0.25)" }}>
               {processing ? "PROCESSING..." : `PAY $${option.price} →`}
