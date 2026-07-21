@@ -3153,7 +3153,7 @@ function BookPage({ defaultLessonType = "Private Lesson" }) {
 const GIFT_CARD_OPTIONS = [
   { lessons: 1, price: 50, label: "Single Lesson", bonus: null, popular: false },
   { lessons: 3, price: 150, label: "3-Lesson Pack", bonus: null, popular: true },
-  { lessons: 6, price: 300, label: "6-Lesson Pack", bonus: "FREE Bonus Lesson ($50 value)", popular: false },
+  { lessons: 6, price: 300, label: "7-Lesson Pack", sub: "Pay for 6 lessons — get a 7th free", totalLessons: 7, bonus: "Includes 1 FREE bonus lesson · you save $50", popular: false },
 ];
 
 function ShopPage() {
@@ -3203,8 +3203,11 @@ function ShopPage() {
               {opt.lessons === 6 && <div style={{ position: "absolute", top: -1, left: 14, background: "#f59e0b", color: "#000", fontFamily: "'DM Sans', sans-serif", fontSize: 9, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", padding: "3px 10px", borderRadius: "0 0 8px 8px" }}>Best Deal</div>}
               <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 44, color: COLORS.lime, lineHeight: 1 }}>${opt.price}</div>
               <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 16, fontWeight: 700, color: COLORS.white, margin: "6px 0 4px" }}>{opt.label}</div>
+              {opt.sub && (
+                <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12.5, fontWeight: 700, color: "#f59e0b", marginBottom: 4 }}>{opt.sub}</div>
+              )}
               <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12.5, color: COLORS.gray, marginBottom: 14, lineHeight: 1.6 }}>
-                {opt.lessons} lesson{opt.lessons > 1 ? "s" : ""} · ${50 * opt.lessons} value · Never expires
+                {(opt.totalLessons || opt.lessons)} lesson{(opt.totalLessons || opt.lessons) > 1 ? "s" : ""} · ${50 * (opt.totalLessons || opt.lessons)} value · Never expires
               </div>
               {opt.bonus && (
                 <div style={{ background: "rgba(245,158,11,0.12)", border: "1px solid rgba(245,158,11,0.3)", borderRadius: 8, padding: "6px 10px", marginBottom: 14 }}>
