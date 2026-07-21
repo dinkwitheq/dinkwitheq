@@ -1096,6 +1096,11 @@ function BookPage({ defaultLessonType = "Private Lesson" }) {
     } else setMonth((m) => m - 1);
     setSelectedDay(null);
   };
+  // Dates Coach EQ is unavailable, as "year-month-day" (month 1-12, no leading zeros)
+  const BLACKOUT_DATES = ["2026-7-28", "2026-7-29", "2026-7-30"];
+  // Last bookable day — no lessons offered after this date
+  const BOOKING_CLOSES = new Date(2026, 7, 31, 23, 59, 59); // Aug 31, 2026
+
   const atLastBookableMonth =
     year > BOOKING_CLOSES.getFullYear() ||
     (year === BOOKING_CLOSES.getFullYear() && month >= BOOKING_CLOSES.getMonth());
@@ -1107,11 +1112,6 @@ function BookPage({ defaultLessonType = "Private Lesson" }) {
     } else setMonth((m) => m + 1);
     setSelectedDay(null);
   };
-
-  // Dates Coach EQ is unavailable, as "year-month-day" (month 1-12, no leading zeros)
-  const BLACKOUT_DATES = ["2026-7-28", "2026-7-29", "2026-7-30"];
-  // Last bookable day — no lessons offered after this date
-  const BOOKING_CLOSES = new Date(2026, 7, 31, 23, 59, 59); // Aug 31, 2026
 
   const isPast = (day: any) => {
     const d = new Date(year, month, day);
