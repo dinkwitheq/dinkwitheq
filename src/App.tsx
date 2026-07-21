@@ -170,6 +170,7 @@ function NavBar({ page, setPage }) {
     typeof window !== "undefined" ? window.innerWidth <= 640 : false
   );
   const links = ["Home", "Book", "Shop", "About", "Contact"];
+  const navLabel = (l) => (l === "Shop" ? "Gift Cards" : l);
 
   useEffect(() => {
     function handleResize() {
@@ -244,7 +245,7 @@ function NavBar({ page, setPage }) {
                 color: page === l ? COLORS.lime : COLORS.gray,
                 borderBottom: page === l ? `2px solid ${COLORS.lime}` : "2px solid transparent",
                 paddingBottom: 2, transition: "all .2s",
-              }}>{l}</button>
+              }}>{navLabel(l)}</button>
             ))}
           </div>
         )}
@@ -267,7 +268,7 @@ function NavBar({ page, setPage }) {
               color: page === l ? COLORS.lime : COLORS.gray,
               textAlign: "left", padding: "0.75rem 1.5rem",
               borderLeft: page === l ? `3px solid ${COLORS.lime}` : "3px solid transparent",
-            }}>{l}</button>
+            }}>{navLabel(l)}</button>
           ))}
         </div>
       )}
@@ -441,7 +442,7 @@ function HomePage({ setPage, bookWithType }) {
                 borderRadius: 4,
               }}
             >
-              SHOP GEAR
+              GIFT CARDS
             </button>
           </div>
         </div>
@@ -3148,144 +3149,7 @@ function BookPage({ defaultLessonType = "Private Lesson" }) {
   );
 }
 
-// ── SHOP PAGE ─────────────────────────────────────────────────────────────────
-const AFFILIATE_PRODUCTS = [
-  {
-    id: 2, category: "Paddles", tag: "New", name: "CRBN TruFoam Barrage 1", brand: "CRBN",
-    price: "$279.99",
-    desc: "100% TruFoam floating core for maximum power and explosive energy return. Raw T700 carbon fiber face for elite spin and put-away shots. USAP approved.",
-    affiliateUrl: "https://www.amazon.com/CRBN-Pickleball-TruFoam-Floating-Designed/dp/B0GS97T2X4?tag=dinkwitheq-20",
-    image: "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/1000x1000/products/8146/40737/CRBN%5FTruFoamBarrage%5FWeb%5F02%5FMain%5FTFB1%5FColor%5F%5F10855.1776176873.jpg?c=1",
-    emoji: "🏓", rating: 5,
-  },
-  {
-    id: 3, category: "Paddles", tag: "Best Seller", name: "JOOLA Ben Johns Hyperion CAS 16", brand: "JOOLA",
-    price: "$189.99",
-    desc: "Ben Johns' signature paddle. Carbon abrasion surface for exceptional spin, elongated handle for two-handed backhands. USAPA approved.",
-    affiliateUrl: "https://www.amazon.com/s?k=JOOLA+Ben+Johns+Hyperion+CAS+16+pickleball&tag=dinkwitheq-20",
-    image: "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/products/268/images/26573/JOOLA-Ben-Johns-Hyperion-CFS-16-1__97023.1699482651.386.513.jpg?c=1",
-    emoji: "🏓", rating: 5,
-  },
-  {
-    id: 4, category: "Paddles", tag: "Coach's Pick", name: "Selkirk SLK Halo Control XL", brand: "Selkirk",
-    price: "$169.99",
-    desc: "A top-rated control paddle with an extended sweet spot. Raw carbon fiber face and 16mm core for a softer, more controlled dink game.",
-    affiliateUrl: "https://www.amazon.com/s?k=Selkirk+SLK+Halo+Control+XL+pickleball+paddle&tag=dinkwitheq-20",
-    image: "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/products/4354/images/31415/SEL1128_HALO_CONTROL_XL_16mm_BLUE_01_1000__27166.1724171068.386.513.jpg?c=1",
-    emoji: "🏓", rating: 5,
-  },
-  {
-    id: 5, category: "Paddles", tag: "Great Value", name: "Franklin Signature Pro Paddle", brand: "Franklin",
-    price: "$149.99",
-    desc: "Carbon fiber surface with 17mm poly core. MaxGrip elongated handle and one-piece construction for great feel at an accessible price.",
-    affiliateUrl: "https://www.amazon.com/s?k=Franklin+Sports+pickleball+paddle+signature&tag=dinkwitheq-20",
-    image: "https://www.pickleball-paddles.com/cdn/shop/products/27604_BLUE_1024x1024@2x.jpg?v=1707869833",
-    emoji: "🏓", rating: 4,
-  },
-  {
-    id: 6, category: "Balls", tag: "Best Value", name: "Franklin X-40 Balls — 100 Pack", brand: "Franklin",
-    price: "$89.99",
-    desc: "Stock up for the whole season. Official ball of USA Pickleball, APP Tour & US Open. Machine-drilled 40 holes for consistent flight every time.",
-    affiliateUrl: "https://www.amazon.com/Franklin-Sports-X-40-Outdoor-Pickleballs/dp/B0DY893FTX?tag=dinkwitheq-20",
-    image: "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/1000x1000/products/526/31489/FRKLXPO%5Fx40Outdoor%5F3-pack%5FYellow%5F02%5F1000%5F%5F04437.1724262362.jpg?c=1",
-    emoji: "🟡", rating: 5,
-  },
-  {
-    id: 7, category: "Balls", tag: "Tournament Grade", name: "Franklin X-40 Balls — 12 Pack", brand: "Franklin",
-    price: "$22.99",
-    desc: "The go-to outdoor pickleball. No-seam one-piece construction resists dents and cracks on hard courts. USAPA approved for tournament play.",
-    affiliateUrl: "https://www.amazon.com/s?k=Franklin+X-40+pickleball+12+pack&tag=dinkwitheq-20",
-    image: "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/1000x1000/products/526/31489/FRKLXPO%5Fx40Outdoor%5F3-pack%5FYellow%5F02%5F1000%5F%5F04437.1724262362.jpg?c=1",
-    emoji: "🟡", rating: 5,
-  },
-  {
-    id: 8, category: "Balls", tag: "", name: "Franklin X-40 Balls — 3 Pack", brand: "Franklin",
-    price: "$9.99",
-    desc: "The perfect starter pack. Same official US Open tournament ball — just 3 to try before you commit to a bigger pack. Great for replacing lost balls.",
-    affiliateUrl: "https://www.amazon.com/s?k=Franklin+X-40+pickleball+3+pack&tag=dinkwitheq-20",
-    image: "https://cdn11.bigcommerce.com/s-tl5mxjzfsl/images/stencil/1000x1000/products/526/31489/FRKLXPO%5Fx40Outdoor%5F3-pack%5FYellow%5F02%5F1000%5F%5F04437.1724262362.jpg?c=1",
-    emoji: "🟡", rating: 5,
-  },
-  {
-    id: 9, category: "Bags", tag: "Coach's Pick", name: "Selkirk Pro Line Tour Bag", brand: "Selkirk",
-    price: "$89.99",
-    desc: "Tour-level V-MAX woven bag. Dedicated paddle pouch, thermal insulated drink pocket, padded laptop sleeve, and ventilated shoe compartment.",
-    affiliateUrl: "https://www.amazon.com/Selkirk-Line-Tour-Pickleball-Backpack/dp/B0D59BHV5M?tag=dinkwitheq-20",
-    image: "https://www.racquetpoint.com/cdn/shop/files/selkirk-pro-line-tour-bag-pickleball-backpack-8789847.png?v=1773161893&width=2048",
-    emoji: "🎒", rating: 5,
-  },
-  {
-    id: 10, category: "Bags", tag: "", name: "adidas Multigame 3.4 Backpack", brand: "adidas",
-    price: "$74.99",
-    desc: "Sleek padel/pickleball backpack with padded racket compartment, thermal insulated side pockets, and ventilated wet-gear section. Water-resistant.",
-    affiliateUrl: "https://www.amazon.com/s?k=adidas+pickleball+backpack&tag=dinkwitheq-20",
-    image: "https://www.racquetpoint.com/cdn/shop/files/adidas-multigame-backpack-34-blackred-4608974.png?v=1755487363&width=1280",
-    emoji: "🎒", rating: 4,
-  },
-  {
-    id: 11, category: "Bags", tag: "Great Value", name: "Wilson Pickleball Sling Bag", brand: "Wilson",
-    price: "$42.00",
-    desc: "Compact and lightweight sling bag. Holds 2 paddles and a case of balls. Fence hook included for courtside hanging. Perfect for casual players.",
-    affiliateUrl: "https://www.amazon.com/WILSON-Pickleball-Sling-Bag-Paddle/dp/B0DBM97YVK?tag=dinkwitheq-20",
-    image: "https://www.racquetpoint.com/cdn/shop/files/wilson-pickleball-sling-bag-757287.jpg?v=1745706520&width=1675",
-    emoji: "🎒", rating: 4,
-  },
-  {
-    id: 12, category: "Apparel", tag: "Top Pick", name: "Nike Court Dri-FIT Polo", brand: "Nike",
-    price: "$55.00",
-    desc: "Sweat-wicking 100% recycled polyester polo. Moisture management keeps you cool and dry through long matches on hot courts.",
-    affiliateUrl: "https://www.amazon.com/s?k=Nike+Dri-FIT+polo+pickleball+tennis&tag=dinkwitheq-20",
-    image: "https://courtsidetennis.com/cdn/shop/products/DH0857-451_800x.jpg?v=1689294612",
-    emoji: "👕", rating: 4,
-  },
-  {
-    id: 13, category: "Apparel", tag: "", name: "Dink Responsibly Tee", brand: "Various", image: "https://images.teepublic.com/derived/production/designs/51728646_0/1697036947/i_p:c_191919,wmk,s_630,q_90.jpg",
-    price: "$24.99",
-    desc: "The iconic pickleball saying on a classic cotton tee. \"Dink Responsibly — Don't Get Smashed.\" Makes a great gift for any player.",
-    affiliateUrl: "https://www.amazon.com/Dink-Responsibly-Funny-Pickleball-T-Shirt/dp/B075ZVH422?tag=dinkwitheq-20",
-    emoji: "😄", rating: 5,
-  },
-  {
-    id: 14, category: "Apparel", tag: "", name: "Just Dink It Tee", brand: "Various", image: "https://images.teepublic.com/derived/production/designs/1401166_1/1491543946/i_p:c_191919,s_630,q_90.jpg",
-    price: "$19.99",
-    desc: "Lightweight classic-fit tee with bold \"Just Dink It\" graphic. A fan favorite on the courts — perfect for any pickleball addict.",
-    affiliateUrl: "https://www.amazon.com/Just-Dink-T-Shirt-Pickleball-Shirt/dp/B07DPCBM58?tag=dinkwitheq-20",
-    emoji: "😂", rating: 5,
-  },
-  {
-    id: 15, category: "Footwear", tag: "Top Pick", name: "ASICS Gel-Rocket 10 Court Shoes", brand: "ASICS",
-    price: "$59.99",
-    desc: "Lightweight court shoe trusted by players worldwide. GEL cushioning system, flex grooves for lateral movement, and non-marking outsole.",
-    affiliateUrl: "https://www.amazon.com/s?k=ASICS+Gel-Rocket+court+shoes&tag=dinkwitheq-20",
-    image: "https://siliconvolley.com/cdn/shop/products/MensRocket10_1_1024x1024@2x.webp?v=1651103827",
-    emoji: "👟", rating: 5,
-  },
-  {
-    id: 16, category: "Accessories", tag: "Best Seller", name: "Tourna Grip XL Overgrip (30-Pack)", brand: "Tourna",
-    price: "$47.50",
-    desc: "The most popular overgrip in racket sports. Ultra-dry absorbency keeps your grip locked in all match long, even in heat and humidity.",
-    affiliateUrl: "https://www.amazon.com/s?k=Tourna+Grip+XL+overgrip+30+pack&tag=dinkwitheq-20",
-    image: "https://www.racquetpoint.com/cdn/shop/files/tourna-grip-original-overgrip-xxl-30-pack-728725.jpg?v=1731795516&width=1200",
-    emoji: "🖐️", rating: 5,
-  },
-  {
-    id: 17, category: "Accessories", tag: "", name: "Paddle Tuning Tape (Lead-Free)", brand: "Various", image: "https://www.racquetpoint.com/cdn/shop/files/paddle-tuning-tape-for-pickleball-7566959.jpg?v=1753163721&width=800",
-    price: "$12.99",
-    desc: "Non-toxic tungsten tape to fine-tune your paddle weight and balance. 1 gram per inch, easy to cut and apply. Comes in a 60\" roll.",
-    affiliateUrl: "https://www.amazon.com/Pickleball-Paddles-Non-Toxic-Customizable-Alternative/dp/B0FPDL4YZ1?tag=dinkwitheq-20",
-    emoji: "🎯", rating: 4,
-  },
-  {
-    id: 18, category: "Accessories", tag: "", name: "Vibration Dampening Overgrip (2-Pack)", brand: "VT Advantec", image: "https://vtadvantec.com/cdn/shop/files/000326-001_004_Tif_300x.jpg?v=1706539942",
-    price: "$19.99",
-    desc: "Converts vibration into energy rather than absorbing it. Tacky feel, excellent moisture absorption, and extra cushion for long sessions.",
-    affiliateUrl: "https://www.amazon.com/s?k=pickleball+vibration+dampening+overgrip&tag=dinkwitheq-20",
-    emoji: "✋", rating: 4,
-  },
-];
-
-const SHOP_CATEGORIES = ["All", "Paddles", "Balls", "Bags", "Apparel", "Footwear", "Accessories", "Gift Cards"];
-
+// ── GIFT CARDS PAGE ──────────────────────────────────────────────────────────
 const GIFT_CARD_OPTIONS = [
   { lessons: 1, price: 50, label: "Single Lesson", bonus: null, popular: false },
   { lessons: 3, price: 150, label: "3-Lesson Pack", bonus: null, popular: true },
@@ -3293,235 +3157,90 @@ const GIFT_CARD_OPTIONS = [
 ];
 
 function ShopPage() {
-  const [activeCategory, setActiveCategory] = useState("All");
-  const [expandedId, setExpandedId] = useState(null as number | null);
   const [gcModal, setGcModal] = useState<any>(null);
-
-  const filtered = activeCategory === "All"
-    ? AFFILIATE_PRODUCTS
-    : activeCategory === "Gift Cards"
-    ? []
-    : AFFILIATE_PRODUCTS.filter(p => p.category === activeCategory);
 
   return (
     <div style={{ background: COLORS.dark, minHeight: "100vh" }}>
+      {/* Header */}
       <div style={{
         background: `linear-gradient(135deg, ${COLORS.dark} 0%, #0d200a 100%)`,
         borderBottom: `2px solid ${COLORS.mid}`,
-        padding: "3rem 1.5rem 2.5rem",
+        padding: "3.5rem 1.5rem 3rem",
         textAlign: "center", position: "relative", overflow: "hidden",
       }}>
         <div style={{
           position: "absolute", inset: 0,
-          background: "radial-gradient(ellipse at 50% 0%, rgba(200,245,66,0.06) 0%, transparent 70%)",
+          background: "radial-gradient(ellipse at 50% 0%, rgba(200,245,66,0.07) 0%, transparent 70%)",
           pointerEvents: "none",
         }} />
         <p style={{
           fontFamily: "'DM Sans', sans-serif", fontSize: 11, fontWeight: 700,
           letterSpacing: "0.3em", textTransform: "uppercase", color: COLORS.lime, marginBottom: 10,
-        }}>Coach-Approved Gear</p>
+        }}>🎁 Gift Cards</p>
         <h1 style={{
           fontFamily: "'Bebas Neue', sans-serif",
-          fontSize: "clamp(2.8rem, 8vw, 5rem)",
+          fontSize: "clamp(2.6rem, 8vw, 4.5rem)",
           color: COLORS.white, letterSpacing: "0.04em", margin: "0 0 0.8rem", lineHeight: 1,
-        }}>Pro Shop</h1>
+        }}>Give the Gift of Pickleball</h1>
         <p style={{
           fontFamily: "'DM Sans', sans-serif", fontSize: "clamp(13px,2vw,15px)",
-          color: COLORS.gray, maxWidth: 480, margin: "0 auto", lineHeight: 1.7,
+          color: COLORS.gray, maxWidth: 520, margin: "0 auto", lineHeight: 1.7,
         }}>
-          Every product below is handpicked by Coach EQ. Links go directly to Amazon — shop with confidence and support DinkwithEQ with every purchase.
+          Coaching sessions with Coach EQ, delivered as a code straight to any inbox.
+          Perfect for friends, family, or yourself — codes never expire and each
+          booking simply deducts from the balance.
         </p>
       </div>
 
-      <div style={{
-        display: "flex", gap: "0.5rem", padding: "1.5rem 1.5rem 0",
-        maxWidth: 1200, margin: "0 auto", flexWrap: "wrap",
-      }}>
-        {SHOP_CATEGORIES.map(cat => (
-          <button key={cat} onClick={() => setActiveCategory(cat)} style={{
-            fontFamily: "'DM Sans', sans-serif", fontSize: 12, fontWeight: 700,
-            letterSpacing: "0.08em", textTransform: "uppercase",
-            padding: "6px 16px", borderRadius: 100, cursor: "pointer",
-            border: `1.5px solid ${activeCategory === cat ? COLORS.lime : COLORS.mid}`,
-            background: activeCategory === cat ? "rgba(200,245,66,0.12)" : "transparent",
-            color: activeCategory === cat ? COLORS.lime : COLORS.gray,
-            transition: "all .15s",
-          }}>{cat}</button>
-        ))}
-      </div>
-
-      <div style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(auto-fill, minmax(210px, 1fr))",
-        gap: "1rem", padding: "1.5rem", maxWidth: 1200, margin: "0 auto",
-      }}>
-        {filtered.map(p => (
-          <div key={p.id} style={{
-            background: COLORS.forest, borderRadius: 12,
-            border: `1px solid ${COLORS.mid}`,
-            display: "flex", flexDirection: "column", overflow: "hidden",
-            transition: "transform .25s cubic-bezier(.22,.68,0,1.2), border-color .2s, box-shadow .3s",
-            boxShadow: "0 4px 18px rgba(0,0,0,0.45)",
-          }}
-          onMouseEnter={e => {
-            e.currentTarget.style.transform = "translateY(-10px) scale(1.025)";
-            e.currentTarget.style.borderColor = COLORS.lime;
-            e.currentTarget.style.boxShadow = "0 24px 56px rgba(0,0,0,0.6), 0 8px 24px rgba(200,245,66,0.18), inset 0 1px 0 rgba(200,245,66,0.12)";
-            const img = e.currentTarget.querySelector("img") as HTMLImageElement | null;
-            if (img) img.style.transform = "scale(1.1) translateY(-4px)";
-          }}
-          onMouseLeave={e => {
-            e.currentTarget.style.transform = "";
-            e.currentTarget.style.borderColor = COLORS.mid;
-            e.currentTarget.style.boxShadow = "0 4px 18px rgba(0,0,0,0.45)";
-            const img = e.currentTarget.querySelector("img") as HTMLImageElement | null;
-            if (img) img.style.transform = "";
-          }}>
-            <div style={{
-              height: 130, display: "flex", alignItems: "center", justifyContent: "center",
-              background: "rgba(218,224,210,0.88)", position: "relative", overflow: "hidden",
-            }}>
-              {p.image ? (
-                <img src={p.image} alt={p.name} style={{ width: "100%", height: "100%", objectFit: "contain", padding: 10, mixBlendMode: "multiply", transition: "transform .3s cubic-bezier(.22,.68,0,1.2)" }} />
-              ) : (
-                <span style={{ fontSize: 52 }}>{p.emoji}</span>
-              )}
-              {p.tag ? (
-                <div style={{
-                  position: "absolute", top: 8, left: 8, zIndex: 2,
-                  background: p.tag === "Coach's Pick" ? COLORS.lime
-                    : p.tag === "Best Seller" || p.tag === "Best Value" ? COLORS.accent
-                    : p.tag === "Top Pick" ? "#6366f1"
-                    : p.tag === "New" ? "#10b981"
-                    : "rgba(0,0,0,0.55)",
-                  color: p.tag === "Coach's Pick" ? COLORS.dark : "#fff",
-                  fontFamily: "'DM Sans', sans-serif", fontSize: 9, fontWeight: 800,
-                  letterSpacing: "0.12em", textTransform: "uppercase",
-                  padding: "3px 8px", borderRadius: 100,
-                }}>{p.tag}</div>
-              ) : null}
-              <div style={{
-                position: "absolute", top: 8, right: 8,
-                background: "rgba(0,0,0,0.55)", borderRadius: 4, padding: "2px 6px",
-                fontFamily: "'DM Sans', sans-serif", fontSize: 9, color: "#fff", fontWeight: 600,
-              }}>{p.brand}</div>
-            </div>
-
-            <div style={{ padding: "0.85rem 1rem 1rem", flex: 1, display: "flex", flexDirection: "column", gap: 6 }}>
-              <div style={{
-                fontFamily: "'DM Sans', sans-serif", fontSize: 13, fontWeight: 700,
-                color: COLORS.white, lineHeight: 1.3,
-                overflow: "hidden", display: "-webkit-box",
-                WebkitLineClamp: 2, WebkitBoxOrient: "vertical" as any,
-              }}>{p.name}</div>
-
-              <div style={{
-                fontFamily: "'Bebas Neue', sans-serif", fontSize: 22, color: COLORS.lime, lineHeight: 1,
-              }}>{p.price}</div>
-
-              <button
-                onClick={() => setExpandedId(expandedId === p.id ? null : p.id)}
-                style={{
-                  background: "transparent", border: `1px solid ${COLORS.mid}`,
-                  borderRadius: 4, padding: "4px 10px", cursor: "pointer",
-                  fontFamily: "'DM Sans', sans-serif", fontSize: 11, fontWeight: 600,
-                  color: COLORS.gray, display: "flex", justifyContent: "space-between",
-                  alignItems: "center", width: "100%",
-                }}
-              >
-                <span>Details</span>
-                <span style={{ fontSize: 9 }}>{expandedId === p.id ? "▲" : "▼"}</span>
-              </button>
-
-              {expandedId === p.id && (
-                <p style={{
-                  fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: COLORS.gray,
-                  lineHeight: 1.6, margin: 0,
-                }}>{p.desc}</p>
-              )}
-
-              <div style={{ marginTop: "auto", paddingTop: 4 }}>
-                <a
-                  href={p.affiliateUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    display: "block", textAlign: "center",
-                    background: COLORS.lime, color: COLORS.dark,
-                    fontFamily: "'Bebas Neue', sans-serif", fontSize: 13, letterSpacing: "0.1em",
-                    padding: "8px 12px", borderRadius: 6, textDecoration: "none",
-                    fontWeight: 700, transition: "opacity .15s",
-                  }}
-                  onMouseEnter={e => { (e.currentTarget as HTMLAnchorElement).style.opacity = "0.85"; }}
-                  onMouseLeave={e => { (e.currentTarget as HTMLAnchorElement).style.opacity = "1"; }}
-                >
-                  BUY ON AMAZON ↗
-                </a>
+      {/* Pricing cards */}
+      <div style={{ maxWidth: 960, margin: "0 auto", padding: "2.5rem 1.5rem 0" }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(230px, 1fr))", gap: "1.2rem" }}>
+          {GIFT_CARD_OPTIONS.map(opt => (
+            <div key={opt.lessons} style={{ position: "relative", background: opt.popular ? "rgba(200,245,66,0.08)" : COLORS.forest, borderRadius: 16, padding: "1.8rem 1.5rem 1.5rem", border: `2px solid ${opt.popular ? COLORS.lime : COLORS.mid}`, display: "flex", flexDirection: "column", transition: "transform .2s, box-shadow .2s" }}
+              onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = "translateY(-4px)"; (e.currentTarget as HTMLElement).style.boxShadow = "0 16px 40px rgba(0,0,0,0.5)"; }}
+              onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = ""; (e.currentTarget as HTMLElement).style.boxShadow = ""; }}>
+              {opt.popular && <div style={{ position: "absolute", top: -1, right: 14, background: COLORS.lime, color: COLORS.dark, fontFamily: "'DM Sans', sans-serif", fontSize: 9, fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase", padding: "3px 10px", borderRadius: "0 0 8px 8px" }}>Most Popular</div>}
+              {opt.lessons === 6 && <div style={{ position: "absolute", top: -1, left: 14, background: "#f59e0b", color: "#000", fontFamily: "'DM Sans', sans-serif", fontSize: 9, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", padding: "3px 10px", borderRadius: "0 0 8px 8px" }}>Best Deal</div>}
+              <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 44, color: COLORS.lime, lineHeight: 1 }}>${opt.price}</div>
+              <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 16, fontWeight: 700, color: COLORS.white, margin: "6px 0 4px" }}>{opt.label}</div>
+              <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12.5, color: COLORS.gray, marginBottom: 14, lineHeight: 1.6 }}>
+                {opt.lessons} lesson{opt.lessons > 1 ? "s" : ""} · ${50 * opt.lessons} value · Never expires
               </div>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <div style={{
-        maxWidth: 1200, margin: "0 auto", padding: "0 1.5rem 3rem",
-        borderTop: `1px solid ${COLORS.mid}`, marginTop: "0.5rem", paddingTop: "1.5rem",
-      }}>
-        <p style={{
-          fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: COLORS.gray,
-          lineHeight: 1.7, maxWidth: 700,
-        }}>
-          {(activeCategory === "All" || activeCategory === "Gift Cards") && (
-            <div style={{ maxWidth: 1200, margin: "0 auto 2rem", padding: "0 1.5rem" }}>
-              <div style={{ background: "linear-gradient(135deg, #0d1f0a 0%, #1a3a10 100%)", borderRadius: 16, padding: "2.5rem 2rem", border: `2px solid ${COLORS.lime}`, position: "relative", overflow: "hidden", marginBottom: "2rem" }}>
-                <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at 80% 20%, rgba(200,245,66,0.08) 0%, transparent 60%)", pointerEvents: "none" }} />
-                <div style={{ position: "relative", zIndex: 1 }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
-                    <span style={{ fontSize: 28 }}>🎁</span>
-                    <div>
-                      <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, fontWeight: 700, color: COLORS.lime, letterSpacing: "0.25em", textTransform: "uppercase" }}>Gift Cards</span>
-                      <h2 style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: "clamp(1.8rem,5vw,3rem)", color: COLORS.white, letterSpacing: "0.04em", margin: "0", lineHeight: 1 }}>Give the Gift of Pickleball</h2>
-                    </div>
-                  </div>
-                  <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, color: COLORS.gray, margin: "0 0 2rem", maxWidth: 540, lineHeight: 1.7 }}>
-                    Perfect for friends, family, or yourself. Codes are emailed instantly and never expire — each booking deducts from your balance so you can split lessons any way you like.
-                  </p>
-                  <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))", gap: "1rem" }}>
-                    {GIFT_CARD_OPTIONS.map(opt => (
-                      <div key={opt.lessons} style={{ position: "relative", background: opt.popular ? "rgba(200,245,66,0.08)" : "rgba(0,0,0,0.3)", borderRadius: 14, padding: "1.5rem", border: `2px solid ${opt.popular ? COLORS.lime : COLORS.mid}`, transition: "transform .2s, box-shadow .2s" }}
-                        onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = "translateY(-4px)"; (e.currentTarget as HTMLElement).style.boxShadow = "0 16px 40px rgba(0,0,0,0.5)"; }}
-                        onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = ""; (e.currentTarget as HTMLElement).style.boxShadow = ""; }}>
-                        {opt.popular && <div style={{ position: "absolute", top: -1, right: 14, background: COLORS.lime, color: COLORS.dark, fontFamily: "'DM Sans', sans-serif", fontSize: 9, fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase", padding: "3px 10px", borderRadius: "0 0 8px 8px" }}>Most Popular</div>}
-                        {opt.lessons === 6 && <div style={{ position: "absolute", top: -1, left: 14, background: "#f59e0b", color: "#000", fontFamily: "'DM Sans', sans-serif", fontSize: 9, fontWeight: 800, letterSpacing: "0.1em", textTransform: "uppercase", padding: "3px 10px", borderRadius: "0 0 8px 8px" }}>Best Deal</div>}
-                        <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 36, color: COLORS.lime, lineHeight: 1 }}>${opt.price}</div>
-                        <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, fontWeight: 700, color: COLORS.white, margin: "4px 0 6px" }}>{opt.label}</div>
-                        <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: COLORS.gray, marginBottom: 12, lineHeight: 1.5 }}>
-                          {opt.lessons} lesson{opt.lessons > 1 ? "s" : ""} · ${50 * opt.lessons} value · Never expires
-                        </div>
-                        {opt.bonus && (
-                          <div style={{ background: "rgba(245,158,11,0.12)", border: "1px solid rgba(245,158,11,0.3)", borderRadius: 8, padding: "6px 10px", marginBottom: 12 }}>
-                            <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: "#f59e0b", fontWeight: 700 }}>🎉 {opt.bonus}</span>
-                          </div>
-                        )}
-                        <button onClick={() => setGcModal(opt)} style={{ width: "100%", background: opt.popular ? COLORS.lime : "transparent", color: opt.popular ? COLORS.dark : COLORS.lime, border: `2px solid ${COLORS.lime}`, borderRadius: 10, padding: "0.75rem", fontFamily: "'Bebas Neue', sans-serif", fontSize: 16, letterSpacing: 2, cursor: "pointer", transition: "all .18s" }}
-                          onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = COLORS.lime; (e.currentTarget as HTMLElement).style.color = COLORS.dark; }}
-                          onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = opt.popular ? COLORS.lime : "transparent"; (e.currentTarget as HTMLElement).style.color = opt.popular ? COLORS.dark : COLORS.lime; }}>
-                          BUY GIFT CARD →
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                  <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: COLORS.gray, marginTop: 16, marginBottom: 0 }}>🔒 Secure checkout · Codes emailed instantly · Use at booking checkout</p>
+              {opt.bonus && (
+                <div style={{ background: "rgba(245,158,11,0.12)", border: "1px solid rgba(245,158,11,0.3)", borderRadius: 8, padding: "6px 10px", marginBottom: 14 }}>
+                  <span style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, color: "#f59e0b", fontWeight: 700 }}>🎉 {opt.bonus}</span>
                 </div>
-              </div>
+              )}
+              <button onClick={() => setGcModal(opt)} style={{ marginTop: "auto", width: "100%", background: opt.popular ? COLORS.lime : "transparent", color: opt.popular ? COLORS.dark : COLORS.lime, border: `2px solid ${COLORS.lime}`, borderRadius: 10, padding: "0.8rem", fontFamily: "'Bebas Neue', sans-serif", fontSize: 16, letterSpacing: 2, cursor: "pointer", transition: "all .18s" }}
+                onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = COLORS.lime; (e.currentTarget as HTMLElement).style.color = COLORS.dark; }}
+                onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = opt.popular ? COLORS.lime : "transparent"; (e.currentTarget as HTMLElement).style.color = opt.popular ? COLORS.dark : COLORS.lime; }}>
+                BUY GIFT CARD →
+              </button>
             </div>
-          )}
+          ))}
+        </div>
 
-          {gcModal && <GiftCardModal option={gcModal} onClose={() => setGcModal(null)} onSuccess={() => setGcModal(null)} />}
+        {/* How it works */}
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(180px, 1fr))", gap: "1rem", margin: "2.5rem 0" }}>
+          {[
+            ["1", "Choose a pack", "Pick the number of lessons — bigger packs unlock bonus value."],
+            ["2", "Code emailed instantly", "The gift card code arrives by email right after checkout."],
+            ["3", "Redeem when booking", "Enter the code at booking checkout — use one lesson at a time."],
+          ].map(([n, title, desc]) => (
+            <div key={n} style={{ background: "rgba(255,255,255,0.03)", border: `1px solid ${COLORS.mid}`, borderRadius: 12, padding: "1.2rem 1.3rem" }}>
+              <div style={{ width: 28, height: 28, borderRadius: "50%", background: COLORS.lime, color: COLORS.dark, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'DM Sans', sans-serif", fontWeight: 800, fontSize: 14, marginBottom: 10 }}>{n}</div>
+              <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, fontWeight: 700, color: COLORS.white, marginBottom: 4 }}>{title}</div>
+              <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12.5, color: COLORS.gray, lineHeight: 1.6 }}>{desc}</div>
+            </div>
+          ))}
+        </div>
 
-          <strong style={{ color: COLORS.gray }}>Affiliate Disclosure:</strong> DinkwithEQ participates in the Amazon Services LLC Associates Program. As an Amazon Associate, we earn a small commission from qualifying purchases at no extra cost to you. All products are independently selected by Coach EQ.
+        <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: COLORS.gray, textAlign: "center", padding: "0 0 3rem", margin: 0 }}>
+          🔒 Secure checkout powered by Stripe · Codes emailed instantly · Questions? <a href="mailto:dinkwitheq@gmail.com" style={{ color: COLORS.lime }}>Get in touch</a>
         </p>
       </div>
+
+      {gcModal && <GiftCardModal option={gcModal} onClose={() => setGcModal(null)} onSuccess={() => setGcModal(null)} />}
     </div>
   );
 }
@@ -4184,7 +3903,7 @@ function Footer({ setPage }) {
               fontWeight: 600,
             }}
           >
-            {p}
+            {p === "Shop" ? "Gift Cards" : p}
           </button>
         ))}
       </div>
