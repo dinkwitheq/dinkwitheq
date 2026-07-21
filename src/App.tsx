@@ -1096,7 +1096,11 @@ function BookPage({ defaultLessonType = "Private Lesson" }) {
     } else setMonth((m) => m - 1);
     setSelectedDay(null);
   };
+  const atLastBookableMonth =
+    year > BOOKING_CLOSES.getFullYear() ||
+    (year === BOOKING_CLOSES.getFullYear() && month >= BOOKING_CLOSES.getMonth());
   const nextMonth = () => {
+    if (atLastBookableMonth) return;
     if (month === 11) {
       setMonth(0);
       setYear((y) => y + 1);
@@ -1104,13 +1108,21 @@ function BookPage({ defaultLessonType = "Private Lesson" }) {
     setSelectedDay(null);
   };
 
+  // Dates Coach EQ is unavailable, as "year-month-day" (month 1-12, no leading zeros)
+  const BLACKOUT_DATES = ["2026-7-28", "2026-7-29", "2026-7-30"];
+  // Last bookable day — no lessons offered after this date
+  const BOOKING_CLOSES = new Date(2026, 7, 31, 23, 59, 59); // Aug 31, 2026
+
   const isPast = (day: any) => {
     const d = new Date(year, month, day);
     d.setHours(23, 59, 59);
     const minDate = new Date(today);
     minDate.setDate(minDate.getDate() + 2);
     minDate.setHours(0, 0, 0, 0);
-    return d < minDate;
+    if (d < minDate) return true;
+    if (d > BOOKING_CLOSES) return true;
+    if (BLACKOUT_DATES.indexOf(`${year}-${month + 1}-${day}`) !== -1) return true;
+    return false;
   };
 
   const availableTimes = selectedDay
@@ -1910,12 +1922,15 @@ function BookPage({ defaultLessonType = "Private Lesson" }) {
             </span>
             <button
               onClick={nextMonth}
+              disabled={atLastBookableMonth}
+              aria-label="Next month"
               style={{
                 background: "none",
                 border: `1px solid ${COLORS.mid}`,
                 color: COLORS.white,
                 padding: "4px 12px",
-                cursor: "pointer",
+                cursor: atLastBookableMonth ? "not-allowed" : "pointer",
+                opacity: atLastBookableMonth ? 0.35 : 1,
                 borderRadius: 4,
                 fontFamily: "'DM Sans', sans-serif",
               }}
