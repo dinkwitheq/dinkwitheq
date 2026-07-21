@@ -1858,178 +1858,6 @@ function BookPage({ defaultLessonType = "Private Lesson" }) {
         </p>
       </div>
 
-      {/* ── SERVICE AREA ── */}
-      <div style={{
-        background: "rgba(200,245,66,0.04)",
-        border: "1px solid rgba(200,245,66,0.18)",
-        borderRadius: 14,
-        padding: "1.4rem 1.6rem",
-        marginBottom: "1.8rem",
-        display: "flex",
-        gap: "1.4rem",
-        alignItems: "flex-start",
-        flexWrap: "wrap",
-      }}>
-        <div style={{ flex: 1, minWidth: 180 }}>
-          <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 20, color: COLORS.lime, letterSpacing: 2, marginBottom: 8 }}>
-            📍 SERVICE AREA
-          </div>
-          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: COLORS.white, margin: "0 0 10px", lineHeight: 1.6 }}>
-            Coach EQ currently serves the{" "}
-            <strong style={{ color: COLORS.lime }}>Southern Willamette Valley</strong>.
-            Lessons are available in:
-          </p>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 10 }}>
-            {["Junction City", "Eugene", "Springfield", "Creswell", "Veneta"].map(city => (
-              <span key={city} style={{
-                background: COLORS.lime,
-                color: COLORS.dark,
-                fontFamily: "'DM Sans', sans-serif",
-                fontWeight: 700,
-                fontSize: 12,
-                padding: "4px 12px",
-                borderRadius: 20,
-              }}>{city}</span>
-            ))}
-          </div>
-          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: COLORS.gray, margin: 0, lineHeight: 1.5 }}>
-            Location confirmed by Coach EQ after booking. Outside this area? Reach out — we may still be able to help.
-          </p>
-        </div>
-        <div style={{ flexShrink: 0, display: "flex", flexDirection: "column", alignItems: "center" }}>
-          <svg viewBox="0 0 260 340" width="190" height="248" style={{ display: "block", borderRadius: 10 }}>
-            <defs>
-              <linearGradient id="mapWestGrad" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%" stopColor="#040a03"/>
-                <stop offset="100%" stopColor="#0d1a0b" stopOpacity="0"/>
-              </linearGradient>
-              <linearGradient id="mapEastGrad" x1="0" y1="0" x2="1" y2="0">
-                <stop offset="0%" stopColor="#0d1a0b" stopOpacity="0"/>
-                <stop offset="100%" stopColor="#040a03"/>
-              </linearGradient>
-              <radialGradient id="mapValley" cx="50%" cy="50%" r="60%">
-                <stop offset="0%" stopColor="#182a14"/>
-                <stop offset="100%" stopColor="#0d1a0b"/>
-              </radialGradient>
-              <radialGradient id="serviceGlow" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stopColor="#C8F542" stopOpacity="0.12"/>
-                <stop offset="100%" stopColor="#C8F542" stopOpacity="0"/>
-              </radialGradient>
-              <radialGradient id="riverGlow" cx="50%" cy="50%" r="50%">
-                <stop offset="0%" stopColor="#3a8fd4" stopOpacity="0.3"/>
-                <stop offset="100%" stopColor="#3a8fd4" stopOpacity="0"/>
-              </radialGradient>
-            </defs>
-
-            {/* Base background */}
-            <rect width="260" height="340" rx="10" fill="#0d1a0b"/>
-            {/* Valley floor */}
-            <rect x="30" y="0" width="200" height="340" fill="url(#mapValley)"/>
-            {/* Coast Range fade-in from left */}
-            <rect x="0" y="0" width="100" height="340" fill="url(#mapWestGrad)"/>
-            {/* Cascade fade-in from right */}
-            <rect x="160" y="0" width="100" height="340" fill="url(#mapEastGrad)"/>
-            {/* Terrain texture left */}
-            <path d="M0,0 C18,60 22,130 18,200 C14,270 8,310 0,340 L50,340 C55,310 60,270 56,200 C52,130 48,60 50,0 Z" fill="#070f06" opacity="0.55"/>
-            {/* Terrain texture right */}
-            <path d="M260,0 C242,60 238,130 242,200 C246,270 252,310 260,340 L210,340 C205,310 200,270 204,200 C208,130 212,60 210,0 Z" fill="#070f06" opacity="0.55"/>
-
-            {/* Service area glow bubble */}
-            <ellipse cx="138" cy="190" rx="88" ry="100" fill="url(#serviceGlow)"/>
-
-            {/* Willamette River — glow then line */}
-            <path d="M178,340 C174,305 168,275 162,250 C156,228 148,210 142,190 C138,175 132,158 126,140 C121,124 118,108 116,80 C115,55 115,25 116,0" stroke="#3a8fd4" strokeWidth="8" fill="none" opacity="0.12"/>
-            <path d="M178,340 C174,305 168,275 162,250 C156,228 148,210 142,190 C138,175 132,158 126,140 C121,124 118,108 116,80 C115,55 115,25 116,0" stroke="#1e5c9e" strokeWidth="2.2" fill="none" opacity="0.8"/>
-
-            {/* McKenzie River (flows west from Cascades into Willamette near Eugene) */}
-            <path d="M260,173 C238,172 220,172 205,170 C194,168 184,165 175,163" stroke="#1e5c9e" strokeWidth="1.4" fill="none" opacity="0.55"/>
-
-            {/* I-5 highway */}
-            <path d="M163,0 C162,40 161,80 160,104 C160,125 161,145 162,163 C163,178 164,198 165,222 C166,255 166,295 166,340" stroke="#cc3300" strokeWidth="1.4" fill="none" opacity="0.4"/>
-
-            {/* HWY 126 east-west through Eugene/Springfield */}
-            <path d="M35,178 C60,179 77,180 110,180 C132,180 148,180 180,180 C200,180 230,179 260,179" stroke="#c87a22" strokeWidth="1.1" fill="none" opacity="0.3" strokeDasharray="5,3"/>
-
-            {/* I-5 shield */}
-            <rect x="168" y="22" width="20" height="15" rx="3" fill="#cc3300" opacity="0.75"/>
-            <text x="178" y="33" fontFamily="Arial,sans-serif" fontSize="8" fill="white" fontWeight="bold" textAnchor="middle">5</text>
-
-            {/* ── CITY MARKERS ── */}
-            {/* Junction City (44.22N, 123.21W) → x=119, y=104 */}
-            <circle cx="119" cy="104" r="16" fill="rgba(200,245,66,0.1)"/>
-            <circle cx="119" cy="104" r="9" fill="#C8F542" opacity="0.9"/>
-            <circle cx="119" cy="104" r="4" fill="#0a1408"/>
-            <circle cx="119" cy="104" r="2" fill="#C8F542"/>
-
-            {/* Veneta (44.05N, 123.35W) → x=77, y=163 */}
-            <circle cx="77" cy="163" r="12" fill="rgba(200,245,66,0.1)"/>
-            <circle cx="77" cy="163" r="7" fill="#C8F542" opacity="0.9"/>
-            <circle cx="77" cy="163" r="3" fill="#0a1408"/>
-            <circle cx="77" cy="163" r="1.5" fill="#C8F542"/>
-
-            {/* Eugene (44.05N, 123.09W) → x=156, y=163 */}
-            <circle cx="156" cy="163" r="18" fill="rgba(200,245,66,0.12)"/>
-            <circle cx="156" cy="163" r="10" fill="#C8F542" opacity="0.95"/>
-            <circle cx="156" cy="163" r="4.5" fill="#0a1408"/>
-            <circle cx="156" cy="163" r="2" fill="#C8F542"/>
-
-            {/* Springfield (44.05N, 123.02W) → x=178, y=163 */}
-            <circle cx="178" cy="163" r="12" fill="rgba(200,245,66,0.1)"/>
-            <circle cx="178" cy="163" r="7" fill="#C8F542" opacity="0.9"/>
-            <circle cx="178" cy="163" r="3" fill="#0a1408"/>
-            <circle cx="178" cy="163" r="1.5" fill="#C8F542"/>
-
-            {/* Creswell (43.92N, 123.02W) → x=178, y=222 */}
-            <circle cx="178" cy="222" r="12" fill="rgba(200,245,66,0.1)"/>
-            <circle cx="178" cy="222" r="7" fill="#C8F542" opacity="0.9"/>
-            <circle cx="178" cy="222" r="3" fill="#0a1408"/>
-            <circle cx="178" cy="222" r="1.5" fill="#C8F542"/>
-
-            {/* ── LABELS ── */}
-            {/* Junction City */}
-            <text x="131" y="100" fontFamily="Arial,sans-serif" fontSize="9.5" fill="#C8F542" fontWeight="bold">Junction City</text>
-
-            {/* Veneta — label to left with leader */}
-            <line x1="70" y1="163" x2="46" y2="157" stroke="#C8F542" strokeWidth="0.8" opacity="0.55"/>
-            <text x="4" y="161" fontFamily="Arial,sans-serif" fontSize="9.5" fill="#C8F542" fontWeight="bold">Veneta</text>
-
-            {/* Eugene — label below */}
-            <text x="156" y="180" fontFamily="Arial,sans-serif" fontSize="10.5" fill="#C8F542" fontWeight="bold" textAnchor="middle">Eugene</text>
-
-            {/* Springfield — label upper right with leader */}
-            <line x1="185" y1="160" x2="198" y2="150" stroke="#C8F542" strokeWidth="0.8" opacity="0.55"/>
-            <text x="200" y="148" fontFamily="Arial,sans-serif" fontSize="9.5" fill="#C8F542" fontWeight="bold">Springfield</text>
-
-            {/* Creswell — label right */}
-            <text x="188" y="226" fontFamily="Arial,sans-serif" fontSize="9.5" fill="#C8F542" fontWeight="bold">Creswell</text>
-
-            {/* ── GEO LABELS ── */}
-            <text x="23" y="170" fontFamily="Arial,sans-serif" fontSize="7" fill="#1f321a" textAnchor="middle" transform="rotate(-90 23 170)">Coast Range</text>
-            <text x="240" y="170" fontFamily="Arial,sans-serif" fontSize="7" fill="#1f321a" textAnchor="middle" transform="rotate(90 240 170)">Cascades</text>
-            <text x="105" y="268" fontFamily="Arial,sans-serif" fontSize="7" fill="#1e4a7a" opacity="0.7" textAnchor="middle" transform="rotate(-72 105 268)">Willamette R.</text>
-
-            {/* ── NORTH ARROW ── */}
-            <g transform="translate(12, 290)">
-              <polygon points="8,0 5,14 8,11 11,14" fill="#C8F542" opacity="0.6"/>
-              <polygon points="8,22 5,14 8,11 11,14" fill="#2a4a2a" opacity="0.6"/>
-              <text x="8" y="30" fontFamily="Arial,sans-serif" fontSize="8" fill="#4a7a4a" textAnchor="middle">N</text>
-            </g>
-
-            {/* ── SCALE BAR ── */}
-            <line x1="82" y1="325" x2="148" y2="325" stroke="#2a4a2a" strokeWidth="2.5"/>
-            <line x1="82" y1="321" x2="82" y2="329" stroke="#2a4a2a" strokeWidth="1.5"/>
-            <line x1="148" y1="321" x2="148" y2="329" stroke="#2a4a2a" strokeWidth="1.5"/>
-            <text x="115" y="338" fontFamily="Arial,sans-serif" fontSize="7.5" fill="#4a7a4a" textAnchor="middle">≈ 10 mi</text>
-
-            {/* Map border */}
-            <rect width="260" height="340" rx="10" fill="none" stroke="rgba(200,245,66,0.14)" strokeWidth="1.5"/>
-          </svg>
-          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, color: COLORS.gray, margin: "4px 0 0", textAlign: "center" }}>
-            Salem – Roseburg corridor
-          </p>
-        </div>
-      </div>
-
       <div
         style={{
           display: "grid",
@@ -3116,6 +2944,178 @@ function BookPage({ defaultLessonType = "Private Lesson" }) {
               )}
             </>
           )}
+        </div>
+      </div>
+
+      {/* ── SERVICE AREA ── */}
+      <div style={{
+        background: "rgba(200,245,66,0.04)",
+        border: "1px solid rgba(200,245,66,0.18)",
+        borderRadius: 14,
+        padding: "1.4rem 1.6rem",
+        marginTop: "1.8rem",
+        display: "flex",
+        gap: "1.4rem",
+        alignItems: "flex-start",
+        flexWrap: "wrap",
+      }}>
+        <div style={{ flex: 1, minWidth: 180 }}>
+          <div style={{ fontFamily: "'Bebas Neue', sans-serif", fontSize: 20, color: COLORS.lime, letterSpacing: 2, marginBottom: 8 }}>
+            📍 SERVICE AREA
+          </div>
+          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: COLORS.white, margin: "0 0 10px", lineHeight: 1.6 }}>
+            Coach EQ currently serves the{" "}
+            <strong style={{ color: COLORS.lime }}>Southern Willamette Valley</strong>.
+            Lessons are available in:
+          </p>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 10 }}>
+            {["Junction City", "Eugene", "Springfield", "Creswell", "Veneta"].map(city => (
+              <span key={city} style={{
+                background: COLORS.lime,
+                color: COLORS.dark,
+                fontFamily: "'DM Sans', sans-serif",
+                fontWeight: 700,
+                fontSize: 12,
+                padding: "4px 12px",
+                borderRadius: 20,
+              }}>{city}</span>
+            ))}
+          </div>
+          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12, color: COLORS.gray, margin: 0, lineHeight: 1.5 }}>
+            Location confirmed by Coach EQ after booking. Outside this area? Reach out — we may still be able to help.
+          </p>
+        </div>
+        <div style={{ flexShrink: 0, display: "flex", flexDirection: "column", alignItems: "center" }}>
+          <svg viewBox="0 0 260 340" width="190" height="248" style={{ display: "block", borderRadius: 10 }}>
+            <defs>
+              <linearGradient id="mapWestGrad" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stopColor="#040a03"/>
+                <stop offset="100%" stopColor="#0d1a0b" stopOpacity="0"/>
+              </linearGradient>
+              <linearGradient id="mapEastGrad" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stopColor="#0d1a0b" stopOpacity="0"/>
+                <stop offset="100%" stopColor="#040a03"/>
+              </linearGradient>
+              <radialGradient id="mapValley" cx="50%" cy="50%" r="60%">
+                <stop offset="0%" stopColor="#182a14"/>
+                <stop offset="100%" stopColor="#0d1a0b"/>
+              </radialGradient>
+              <radialGradient id="serviceGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stopColor="#C8F542" stopOpacity="0.12"/>
+                <stop offset="100%" stopColor="#C8F542" stopOpacity="0"/>
+              </radialGradient>
+              <radialGradient id="riverGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stopColor="#3a8fd4" stopOpacity="0.3"/>
+                <stop offset="100%" stopColor="#3a8fd4" stopOpacity="0"/>
+              </radialGradient>
+            </defs>
+
+            {/* Base background */}
+            <rect width="260" height="340" rx="10" fill="#0d1a0b"/>
+            {/* Valley floor */}
+            <rect x="30" y="0" width="200" height="340" fill="url(#mapValley)"/>
+            {/* Coast Range fade-in from left */}
+            <rect x="0" y="0" width="100" height="340" fill="url(#mapWestGrad)"/>
+            {/* Cascade fade-in from right */}
+            <rect x="160" y="0" width="100" height="340" fill="url(#mapEastGrad)"/>
+            {/* Terrain texture left */}
+            <path d="M0,0 C18,60 22,130 18,200 C14,270 8,310 0,340 L50,340 C55,310 60,270 56,200 C52,130 48,60 50,0 Z" fill="#070f06" opacity="0.55"/>
+            {/* Terrain texture right */}
+            <path d="M260,0 C242,60 238,130 242,200 C246,270 252,310 260,340 L210,340 C205,310 200,270 204,200 C208,130 212,60 210,0 Z" fill="#070f06" opacity="0.55"/>
+
+            {/* Service area glow bubble */}
+            <ellipse cx="138" cy="190" rx="88" ry="100" fill="url(#serviceGlow)"/>
+
+            {/* Willamette River — glow then line */}
+            <path d="M178,340 C174,305 168,275 162,250 C156,228 148,210 142,190 C138,175 132,158 126,140 C121,124 118,108 116,80 C115,55 115,25 116,0" stroke="#3a8fd4" strokeWidth="8" fill="none" opacity="0.12"/>
+            <path d="M178,340 C174,305 168,275 162,250 C156,228 148,210 142,190 C138,175 132,158 126,140 C121,124 118,108 116,80 C115,55 115,25 116,0" stroke="#1e5c9e" strokeWidth="2.2" fill="none" opacity="0.8"/>
+
+            {/* McKenzie River (flows west from Cascades into Willamette near Eugene) */}
+            <path d="M260,173 C238,172 220,172 205,170 C194,168 184,165 175,163" stroke="#1e5c9e" strokeWidth="1.4" fill="none" opacity="0.55"/>
+
+            {/* I-5 highway */}
+            <path d="M163,0 C162,40 161,80 160,104 C160,125 161,145 162,163 C163,178 164,198 165,222 C166,255 166,295 166,340" stroke="#cc3300" strokeWidth="1.4" fill="none" opacity="0.4"/>
+
+            {/* HWY 126 east-west through Eugene/Springfield */}
+            <path d="M35,178 C60,179 77,180 110,180 C132,180 148,180 180,180 C200,180 230,179 260,179" stroke="#c87a22" strokeWidth="1.1" fill="none" opacity="0.3" strokeDasharray="5,3"/>
+
+            {/* I-5 shield */}
+            <rect x="168" y="22" width="20" height="15" rx="3" fill="#cc3300" opacity="0.75"/>
+            <text x="178" y="33" fontFamily="Arial,sans-serif" fontSize="8" fill="white" fontWeight="bold" textAnchor="middle">5</text>
+
+            {/* ── CITY MARKERS ── */}
+            {/* Junction City (44.22N, 123.21W) → x=119, y=104 */}
+            <circle cx="119" cy="104" r="16" fill="rgba(200,245,66,0.1)"/>
+            <circle cx="119" cy="104" r="9" fill="#C8F542" opacity="0.9"/>
+            <circle cx="119" cy="104" r="4" fill="#0a1408"/>
+            <circle cx="119" cy="104" r="2" fill="#C8F542"/>
+
+            {/* Veneta (44.05N, 123.35W) → x=77, y=163 */}
+            <circle cx="77" cy="163" r="12" fill="rgba(200,245,66,0.1)"/>
+            <circle cx="77" cy="163" r="7" fill="#C8F542" opacity="0.9"/>
+            <circle cx="77" cy="163" r="3" fill="#0a1408"/>
+            <circle cx="77" cy="163" r="1.5" fill="#C8F542"/>
+
+            {/* Eugene (44.05N, 123.09W) → x=156, y=163 */}
+            <circle cx="156" cy="163" r="18" fill="rgba(200,245,66,0.12)"/>
+            <circle cx="156" cy="163" r="10" fill="#C8F542" opacity="0.95"/>
+            <circle cx="156" cy="163" r="4.5" fill="#0a1408"/>
+            <circle cx="156" cy="163" r="2" fill="#C8F542"/>
+
+            {/* Springfield (44.05N, 123.02W) → x=178, y=163 */}
+            <circle cx="178" cy="163" r="12" fill="rgba(200,245,66,0.1)"/>
+            <circle cx="178" cy="163" r="7" fill="#C8F542" opacity="0.9"/>
+            <circle cx="178" cy="163" r="3" fill="#0a1408"/>
+            <circle cx="178" cy="163" r="1.5" fill="#C8F542"/>
+
+            {/* Creswell (43.92N, 123.02W) → x=178, y=222 */}
+            <circle cx="178" cy="222" r="12" fill="rgba(200,245,66,0.1)"/>
+            <circle cx="178" cy="222" r="7" fill="#C8F542" opacity="0.9"/>
+            <circle cx="178" cy="222" r="3" fill="#0a1408"/>
+            <circle cx="178" cy="222" r="1.5" fill="#C8F542"/>
+
+            {/* ── LABELS ── */}
+            {/* Junction City */}
+            <text x="131" y="100" fontFamily="Arial,sans-serif" fontSize="9.5" fill="#C8F542" fontWeight="bold">Junction City</text>
+
+            {/* Veneta — label to left with leader */}
+            <line x1="70" y1="163" x2="46" y2="157" stroke="#C8F542" strokeWidth="0.8" opacity="0.55"/>
+            <text x="4" y="161" fontFamily="Arial,sans-serif" fontSize="9.5" fill="#C8F542" fontWeight="bold">Veneta</text>
+
+            {/* Eugene — label below */}
+            <text x="156" y="180" fontFamily="Arial,sans-serif" fontSize="10.5" fill="#C8F542" fontWeight="bold" textAnchor="middle">Eugene</text>
+
+            {/* Springfield — label upper right with leader */}
+            <line x1="185" y1="160" x2="198" y2="150" stroke="#C8F542" strokeWidth="0.8" opacity="0.55"/>
+            <text x="200" y="148" fontFamily="Arial,sans-serif" fontSize="9.5" fill="#C8F542" fontWeight="bold">Springfield</text>
+
+            {/* Creswell — label right */}
+            <text x="188" y="226" fontFamily="Arial,sans-serif" fontSize="9.5" fill="#C8F542" fontWeight="bold">Creswell</text>
+
+            {/* ── GEO LABELS ── */}
+            <text x="23" y="170" fontFamily="Arial,sans-serif" fontSize="7" fill="#1f321a" textAnchor="middle" transform="rotate(-90 23 170)">Coast Range</text>
+            <text x="240" y="170" fontFamily="Arial,sans-serif" fontSize="7" fill="#1f321a" textAnchor="middle" transform="rotate(90 240 170)">Cascades</text>
+            <text x="105" y="268" fontFamily="Arial,sans-serif" fontSize="7" fill="#1e4a7a" opacity="0.7" textAnchor="middle" transform="rotate(-72 105 268)">Willamette R.</text>
+
+            {/* ── NORTH ARROW ── */}
+            <g transform="translate(12, 290)">
+              <polygon points="8,0 5,14 8,11 11,14" fill="#C8F542" opacity="0.6"/>
+              <polygon points="8,22 5,14 8,11 11,14" fill="#2a4a2a" opacity="0.6"/>
+              <text x="8" y="30" fontFamily="Arial,sans-serif" fontSize="8" fill="#4a7a4a" textAnchor="middle">N</text>
+            </g>
+
+            {/* ── SCALE BAR ── */}
+            <line x1="82" y1="325" x2="148" y2="325" stroke="#2a4a2a" strokeWidth="2.5"/>
+            <line x1="82" y1="321" x2="82" y2="329" stroke="#2a4a2a" strokeWidth="1.5"/>
+            <line x1="148" y1="321" x2="148" y2="329" stroke="#2a4a2a" strokeWidth="1.5"/>
+            <text x="115" y="338" fontFamily="Arial,sans-serif" fontSize="7.5" fill="#4a7a4a" textAnchor="middle">≈ 10 mi</text>
+
+            {/* Map border */}
+            <rect width="260" height="340" rx="10" fill="none" stroke="rgba(200,245,66,0.14)" strokeWidth="1.5"/>
+          </svg>
+          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 10, color: COLORS.gray, margin: "4px 0 0", textAlign: "center" }}>
+            Salem – Roseburg corridor
+          </p>
         </div>
       </div>
     </div>
