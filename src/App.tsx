@@ -1852,7 +1852,7 @@ function BookPage({ defaultLessonType = "Private Lesson" }) {
 
   return (
     <div style={{ maxWidth: 900, margin: "0 auto", padding: "2rem 1rem" }}>
-      <div style={{ marginBottom: "2rem" }}>
+      <div className="anim-fade-up anim-d1" style={{ marginBottom: "2rem" }}>
         <p
           style={{
             fontFamily: "'DM Sans', sans-serif",
@@ -1908,6 +1908,7 @@ function BookPage({ defaultLessonType = "Private Lesson" }) {
       >
         {/* Calendar */}
         <div
+          data-reveal
           style={{
             background: COLORS.forest,
             borderRadius: 12,
@@ -2991,7 +2992,7 @@ function BookPage({ defaultLessonType = "Private Lesson" }) {
       </div>
 
       {/* ── SERVICE AREA ── */}
-      <div style={{
+      <div data-reveal style={{
         background: "rgba(200,245,66,0.04)",
         border: "1px solid rgba(200,245,66,0.18)",
         borderRadius: 14,
@@ -3192,8 +3193,8 @@ function ShopPage() {
         <p style={{
           fontFamily: "'DM Sans', sans-serif", fontSize: 11, fontWeight: 700,
           letterSpacing: "0.3em", textTransform: "uppercase", color: COLORS.lime, marginBottom: 10,
-        }}>🎁 Gift Cards</p>
-        <h1 style={{
+        }} className="anim-fade-up anim-d1"><span className="float-slow">🎁</span> Gift Cards</p>
+        <h1 className="anim-fade-up anim-d2" style={{
           fontFamily: "'Bebas Neue', sans-serif",
           fontSize: "clamp(2.6rem, 8vw, 4.5rem)",
           color: COLORS.white, letterSpacing: "0.04em", margin: "0 0 0.8rem", lineHeight: 1,
@@ -3211,8 +3212,8 @@ function ShopPage() {
       {/* Pricing cards */}
       <div style={{ maxWidth: 960, margin: "0 auto", padding: "2.5rem 1.5rem 0" }}>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(230px, 1fr))", gap: "1.2rem" }}>
-          {GIFT_CARD_OPTIONS.map(opt => (
-            <div key={opt.lessons} style={{ position: "relative", background: opt.popular ? "rgba(200,245,66,0.08)" : COLORS.forest, borderRadius: 16, padding: "1.8rem 1.5rem 1.5rem", border: `2px solid ${opt.popular ? COLORS.lime : COLORS.mid}`, display: "flex", flexDirection: "column", transition: "transform .2s, box-shadow .2s" }}
+          {GIFT_CARD_OPTIONS.map((opt, gi) => (
+            <div key={opt.lessons} data-reveal={String(gi + 1)} style={{ position: "relative", background: opt.popular ? "rgba(200,245,66,0.08)" : COLORS.forest, borderRadius: 16, padding: "1.8rem 1.5rem 1.5rem", border: `2px solid ${opt.popular ? COLORS.lime : COLORS.mid}`, display: "flex", flexDirection: "column", transition: "transform .2s, box-shadow .2s" }}
               onMouseEnter={e => { (e.currentTarget as HTMLElement).style.transform = "translateY(-4px)"; (e.currentTarget as HTMLElement).style.boxShadow = "0 16px 40px rgba(0,0,0,0.5)"; }}
               onMouseLeave={e => { (e.currentTarget as HTMLElement).style.transform = ""; (e.currentTarget as HTMLElement).style.boxShadow = ""; }}>
               {opt.popular && <div style={{ position: "absolute", top: -1, right: 14, background: COLORS.lime, color: COLORS.dark, fontFamily: "'DM Sans', sans-serif", fontSize: 9, fontWeight: 800, letterSpacing: "0.12em", textTransform: "uppercase", padding: "3px 10px", borderRadius: "0 0 8px 8px" }}>Most Popular</div>}
@@ -3245,8 +3246,8 @@ function ShopPage() {
             ["1", "Choose a pack", "Pick the number of lessons — bigger packs unlock bonus value."],
             ["2", "Code emailed instantly", "The gift card code arrives by email right after checkout."],
             ["3", "Redeem when booking", "Enter the code at booking checkout — use one lesson at a time."],
-          ].map(([n, title, desc]) => (
-            <div key={n} style={{ background: "rgba(255,255,255,0.03)", border: `1px solid ${COLORS.mid}`, borderRadius: 12, padding: "1.2rem 1.3rem" }}>
+          ].map(([n, title, desc], hi) => (
+            <div key={n} data-reveal={String(hi + 1)} style={{ background: "rgba(255,255,255,0.03)", border: `1px solid ${COLORS.mid}`, borderRadius: 12, padding: "1.2rem 1.3rem" }}>
               <div style={{ width: 28, height: 28, borderRadius: "50%", background: COLORS.lime, color: COLORS.dark, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'DM Sans', sans-serif", fontWeight: 800, fontSize: 14, marginBottom: 10 }}>{n}</div>
               <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, fontWeight: 700, color: COLORS.white, marginBottom: 4 }}>{title}</div>
               <div style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 12.5, color: COLORS.gray, lineHeight: 1.6 }}>{desc}</div>
@@ -3633,7 +3634,7 @@ function AboutPage({ setPage }) {
         </P>
 
         {/* Pull quote */}
-        <div
+        <div data-reveal
           style={{
             borderLeft: `4px solid ${COLORS.lime}`,
             background: "rgba(200,245,66,0.05)",
@@ -3757,7 +3758,7 @@ function AboutPage({ setPage }) {
         </div>
 
         {/* Badges */}
-        <div
+        <div data-reveal
           style={{
             display: "flex",
             gap: "0.8rem",
@@ -3812,7 +3813,7 @@ function AboutPage({ setPage }) {
         </div>
 
         {/* Research note */}
-        <div
+        <div data-reveal
           style={{
             background: COLORS.forest,
             borderRadius: 8,
@@ -3948,14 +3949,14 @@ function ContactPage({ setPage }) {
       <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 11, fontWeight: 700, letterSpacing: "0.25em", textTransform: "uppercase", color: COLORS.lime, marginBottom: 8 }}>
         Get In Touch
       </p>
-      <h1 style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "clamp(28px, 5vw, 42px)", fontWeight: 700, color: COLORS.white, margin: "0 0 0.5rem" }}>
+      <h1 className="anim-fade-up anim-d1" style={{ fontFamily: "'DM Sans', sans-serif", fontSize: "clamp(28px, 5vw, 42px)", fontWeight: 700, color: COLORS.white, margin: "0 0 0.5rem" }}>
         Contact <span style={{ color: COLORS.lime }}>Coach EQ</span>
       </h1>
       <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, color: COLORS.gray, marginBottom: "2.5rem", lineHeight: 1.6 }}>
         Have a question about lessons, scheduling, or pricing? Reach out — I typically respond within 24 hours.
       </p>
 
-      <div style={{ marginBottom: "2.5rem" }}>
+      <div data-reveal style={{ marginBottom: "2.5rem" }}>
         <a href={"mailto:" + emailParts.join("")} style={{ textDecoration: "none" }}>
           <div
             style={{
@@ -3988,7 +3989,7 @@ function ContactPage({ setPage }) {
         </a>
       </div>
 
-      <div style={{ background: "rgba(200,245,66,0.05)", border: "1px solid rgba(200,245,66,0.15)", borderRadius: 12, padding: "1.2rem 1.4rem", marginBottom: "2rem" }}>
+      <div data-reveal="2" style={{ background: "rgba(200,245,66,0.05)", border: "1px solid rgba(200,245,66,0.15)", borderRadius: 12, padding: "1.2rem 1.4rem", marginBottom: "2rem" }}>
         <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: COLORS.gray, margin: 0, lineHeight: 1.7 }}>
           🏓 Ready to book? Head to the{" "}
           <a
