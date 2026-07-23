@@ -301,6 +301,7 @@ function HomePage({ setPage, bookWithType }) {
           <img
             src={COACH_IMG}
             alt="Coach EQ playing pickleball"
+            className="hero-photo"
             style={{
               width: "100%",
               height: "100%",
@@ -358,6 +359,7 @@ function HomePage({ setPage, bookWithType }) {
           }}
         >
           <div
+            className="anim-fade-up anim-d1"
             style={{
               display: "inline-block",
               background: "rgba(200,245,66,0.4)",
@@ -375,6 +377,7 @@ function HomePage({ setPage, bookWithType }) {
           </div>
 
           <h1
+            className="anim-fade-up anim-d2"
             style={{
               fontFamily: "'Bebas Neue', sans-serif",
               fontSize: "clamp(3.2rem, 14vw, 7rem)",
@@ -390,6 +393,7 @@ function HomePage({ setPage, bookWithType }) {
           </h1>
 
           <p
+            className="anim-fade-up anim-d3"
             style={{
               fontFamily: "'DM Sans', sans-serif",
               fontSize: "1rem",
@@ -404,6 +408,7 @@ function HomePage({ setPage, bookWithType }) {
           </p>
 
           <div
+            className="anim-fade-up anim-d4"
             style={{
               display: "flex",
               gap: "0.8rem",
@@ -413,6 +418,7 @@ function HomePage({ setPage, bookWithType }) {
           >
             <button
               onClick={() => setPage("Book")}
+              className="cta-glow"
               style={{
                 background: COLORS.lime,
                 color: COLORS.dark,
@@ -450,6 +456,7 @@ function HomePage({ setPage, bookWithType }) {
 
       {/* PPR Logo Banner */}
       <div
+        data-reveal
         style={{
           background: `linear-gradient(90deg, ${COLORS.dark} 0%, ${COLORS.forest} 50%, ${COLORS.dark} 100%)`,
           borderTop: `2px solid ${COLORS.mid}`,
@@ -552,7 +559,7 @@ function HomePage({ setPage, bookWithType }) {
       {/* Services */}
       <div style={{ padding: "4rem 1rem 5rem", maxWidth: 1100, margin: "0 auto" }}>
         {/* Section header */}
-        <div style={{ textAlign: "center", marginBottom: "3.5rem" }}>
+        <div data-reveal style={{ textAlign: "center", marginBottom: "3.5rem" }}>
           <p style={{
             fontFamily: "'DM Sans', sans-serif",
             fontSize: "clamp(10px, 2vw, 12px)",
@@ -575,6 +582,7 @@ function HomePage({ setPage, bookWithType }) {
 
         {/* Private Lesson card */}
         <div
+          data-reveal
           style={{
             position: "relative",
             background: "linear-gradient(135deg, #0a1a08 0%, #0F1A0A 40%, #162810 100%)",
@@ -678,6 +686,7 @@ function HomePage({ setPage, bookWithType }) {
 
         {/* Group Clinic card */}
         <div
+          data-reveal="2"
           style={{
             position: "relative",
             background: "linear-gradient(135deg, #0d1f0a 0%, #0F1A0A 40%, #0a1508 100%)",
@@ -784,6 +793,7 @@ function HomePage({ setPage, bookWithType }) {
       <div style={{ background: COLORS.forest, padding: "3rem 1rem" }}>
         <div style={{ textAlign: "center", marginBottom: "2.5rem" }}>
           <p
+            data-reveal
             style={{
               fontFamily: "'DM Sans', sans-serif",
               fontSize: "clamp(10px, 2vw, 12px)",
@@ -797,6 +807,7 @@ function HomePage({ setPage, bookWithType }) {
             Hear From Our Players
           </p>
           <h2
+            data-reveal="2"
             style={{
               fontFamily: "'DM Sans', sans-serif",
               fontSize: "clamp(28px, 5vw, 42px)",
@@ -844,9 +855,10 @@ function HomePage({ setPage, bookWithType }) {
               text: "Incredibly patient and knowledgeable. Coach EQ is perfect for beginners — I finally understand the kitchen rule!",
               rating: 5,
             },
-          ].map((t) => (
+          ].map((t, i) => (
             <div
               key={t.name}
+              data-reveal={String(i + 1)}
               style={{
                 background: COLORS.dark,
                 padding: "1.8rem",
@@ -896,6 +908,7 @@ function HomePage({ setPage, bookWithType }) {
       >
         <div style={{ marginBottom: "1rem" }}>
           <p
+            data-reveal
             style={{
               fontFamily: "'DM Sans', sans-serif",
               fontSize: "clamp(10px, 2vw, 12px)",
@@ -909,6 +922,7 @@ function HomePage({ setPage, bookWithType }) {
             Get On The Court
           </p>
           <h2
+            data-reveal="2"
             style={{
               fontFamily: "'DM Sans', sans-serif",
               fontSize: "clamp(28px, 5vw, 42px)",
@@ -942,6 +956,8 @@ function HomePage({ setPage, bookWithType }) {
         </p>
         <button
           onClick={() => setPage("Book")}
+          className="cta-glow"
+          data-reveal="3"
           style={{
             background: COLORS.lime,
             color: COLORS.dark,
@@ -960,7 +976,7 @@ function HomePage({ setPage, bookWithType }) {
       </div>
 
       {/* Gift Card Promo Banner */}
-      <div style={{ background: "linear-gradient(135deg, #0d1f0a 0%, #1a3a10 50%, #0d1f0a 100%)", borderTop: `3px solid ${COLORS.lime}`, borderBottom: `3px solid ${COLORS.lime}`, padding: "3rem 1.5rem", textAlign: "center", position: "relative", overflow: "hidden" }}>
+      <div data-reveal style={{ background: "linear-gradient(135deg, #0d1f0a 0%, #1a3a10 50%, #0d1f0a 100%)", borderTop: `3px solid ${COLORS.lime}`, borderBottom: `3px solid ${COLORS.lime}`, padding: "3rem 1.5rem", textAlign: "center", position: "relative", overflow: "hidden" }}>
         <div style={{ position: "absolute", inset: 0, background: "radial-gradient(ellipse at 50% 50%, rgba(200,245,66,0.07) 0%, transparent 70%)", pointerEvents: "none" }} />
         <div style={{ position: "relative", zIndex: 1, maxWidth: 640, margin: "0 auto" }}>
           <div style={{ display: "inline-flex", alignItems: "center", gap: 8, background: "rgba(245,158,11,0.15)", border: "1px solid rgba(245,158,11,0.4)", borderRadius: 100, padding: "5px 16px", marginBottom: 16 }}>
@@ -4036,6 +4052,29 @@ export default function App() {
     setDefaultLessonType(type);
     setPage("Book");
   };
+
+  // Reveal-on-scroll: fade sections in as they enter the viewport
+  useEffect(() => {
+    const els = Array.from(document.querySelectorAll("[data-reveal]:not(.revealed)"));
+    if (!els.length) return;
+    if (typeof IntersectionObserver === "undefined") {
+      els.forEach((el) => el.classList.add("revealed"));
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("revealed");
+            io.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: "0px 0px -30px 0px" }
+    );
+    els.forEach((el) => io.observe(el));
+    return () => io.disconnect();
+  }, [page]);
 
   return (
     <>

@@ -47,3 +47,59 @@ input, select, textarea, button {
     font-size: 16px !important; /* prevents iOS zoom on focus */
   }
 }
+
+
+/* ── Premium motion system ──────────────────────────────────────────────── */
+html { scroll-behavior: smooth; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(26px); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes heroZoom {
+  from { transform: scale(1.08); }
+  to   { transform: scale(1); }
+}
+@keyframes ctaGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(200,245,66,0.35), 0 6px 22px rgba(0,0,0,0.4); }
+  50%      { box-shadow: 0 0 26px 4px rgba(200,245,66,0.28), 0 6px 22px rgba(0,0,0,0.4); }
+}
+@keyframes floaty {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-7px); }
+}
+
+/* Above-the-fold entrance (hero) */
+.anim-fade-up { animation: fadeUp .85s cubic-bezier(.22,.68,0,1) both; }
+.anim-d1 { animation-delay: .05s; }
+.anim-d2 { animation-delay: .18s; }
+.anim-d3 { animation-delay: .32s; }
+.anim-d4 { animation-delay: .46s; }
+.hero-photo { animation: heroZoom 8s cubic-bezier(.16,.6,.24,1) both; }
+.cta-glow { animation: ctaGlow 3.2s ease-in-out infinite; }
+.float-slow { display: inline-block; animation: floaty 4s ease-in-out infinite; }
+
+/* Scroll reveals — elements with data-reveal start hidden, .revealed animates in */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(26px);
+  transition: opacity .75s cubic-bezier(.22,.68,0,1), transform .75s cubic-bezier(.22,.68,0,1);
+}
+[data-reveal].revealed { opacity: 1; transform: none; }
+[data-reveal="2"] { transition-delay: .12s; }
+[data-reveal="3"] { transition-delay: .24s; }
+[data-reveal="4"] { transition-delay: .36s; }
+
+/* Micro-interactions */
+button { transition: transform .15s ease, box-shadow .25s ease, opacity .2s ease, background .2s ease, color .2s ease, border-color .2s ease; }
+button:active:not(:disabled) { transform: scale(0.97); }
+a, button { -webkit-tap-highlight-color: transparent; }
+:focus-visible { outline: 2px solid #C8F542; outline-offset: 2px; }
+
+/* Respect reduced-motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .anim-fade-up, .hero-photo, .cta-glow, .float-slow { animation: none !important; }
+  [data-reveal] { opacity: 1 !important; transform: none !important; transition: none !important; }
+  button { transition: none; }
+}
